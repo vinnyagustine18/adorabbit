@@ -5,55 +5,126 @@ import { Text, View } from "../../components/themed";
 import useGetCurrentLocation from "../../hooks/use-get-current-location";
 import MapView, { Marker } from "react-native-maps";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import React from "react";
+import { add, debounce } from "lodash";
 
 export default function TabOneScreen() {
   const { location } = useGetCurrentLocation();
 
+  const [region, setRegion] = React.useState({
+    latitude: location?.coords?.latitude ?? 37.4226711,
+    longitude: location?.coords?.longitude ?? -122.0849872,
+    latitudeDelta: 0.005,
+    longitudeDelta: 0.005,
+  });
+  const [isBuffer, setIsBuffer] = React.useState(false);
+  const [address, setAddress] = React.useState("");
+
+  const onGenerateAddress = React.useCallback(
+    async ({
+      latitude,
+      longitude,
+    }: {
+      latitude: number;
+      longitude: number;
+    }) => {
+      try {
+        const request = await fetch(
+          `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude}%2C${longitude}&location_type=ROOFTOP%7CRANGE_INTERPOLATED%7CGEOMETRIC_CENTER&key=${"AIzaSyCEjmASHmwsueyVcBTftVvErllIA2sllNg"}`
+        );
+
+        const response = await request.json();
+
+        const address = response.results?.[0]?.formatted_address;
+        setAddress(address);
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    [setAddress]
+  );
+
   return (
     <View style={styles.container}>
-      <GooglePlacesAutocomplete
-        placeholder="Search"
-        onPress={(data, details = null) => {
-          // 'details' is provided when fetchDetails = true
-          console.log(data, details);
-        }}
-        query={{
-          key: "AIzaSyCEjmASHmwsueyVcBTftVvErllIA2sllNg",
-          language: "id",
-        }}
-        styles={{
-          textInputContainer: {
-            width: "100%",
-            borderColor: "black",
-            borderWidth: 0.5,
-          },
-        }}
-      />
       <MapView
         style={styles.map}
-        initialRegion={{
-          latitude: 37.4226711,
-          longitude: -122.0849872,
-          latitudeDelta: 0.005,
-          longitudeDelta: 0.005,
-        }}
         provider="google"
+        initialRegion={region}
         onRegionChange={(region, detail) => {
-          console.log(region, detail);
+          setRegion((prev) => ({
+            ...prev,
+            latitude: region.latitude,
+            longitude: region.longitude,
+          }));
         }}
+        onRegionChangeComplete={(region) => {
+          onGenerateAddress({
+            latitude: region.latitude,
+            longitude: region.longitude,
+          });
+        }}
+        {...(isBuffer ? { region } : { initialRegion: region })}
       >
         <Marker
-          draggable
-          onDrag={(event) => {
-            console.log(event.nativeEvent.coordinate);
-          }}
           coordinate={{
-            latitude: location?.coords?.latitude ?? 37.4226711,
-            longitude: location?.coords?.longitude ?? -122.0849872,
+            latitude: region.latitude,
+            longitude: region.longitude,
           }}
-          title="Your Location"
+          title={address}
         />
       </MapView>
+      <View
+        style={{
+          backgroundColor: "rgba(0,0,0,0)",
+          position: "absolute",
+          top: 16,
+          left: 5,
+          right: 5,
+        }}
+      >
+        <GooglePlacesAutocomplete
+          currentLocationLabel={address}
+          placeholder={"Search"}
+          fetchDetails={true}
+          GooglePlacesDetailsQuery={{ fields: "geometry" }}
+          onPress={(data, details = null) => {
+            const { lat, lng } = details!.geometry.location;
+            setRegion((prev) => ({ ...prev, latitude: lat, longitude: lng }));
+            onGenerateAddress({ latitude: lat, longitude: lng });
+            setIsBuffer(true);
+
+            debounce(() => setIsBuffer(false), 200)();
+          }}
+          query={{
+            key: "AIzaSyCEjmASHmwsueyVcBTftVvErllIA2sllNg",
+            language: "id",
+          }}
+          styles={{
+            textInputContainer: {
+              width: "100%",
+              backgroundColor: "rgba(0,0,0,0)",
+              borderTopWidth: 0,
+              borderBottomWidth: 0,
+            },
+            textInput: {
+              marginLeft: 0,
+              marginRight: 0,
+              height: 38,
+              color: "#5d5d5d",
+              fontSize: 16,
+            },
+            description: {
+              fontWeight: "bold",
+            },
+            predefinedPlacesDescription: {
+              color: "#1faadb",
+            },
+            listView: {
+              backgroundColor: "rgba(255,255,255,1)",
+            },
+          }}
+        />
+      </View>
     </View>
   );
 }
@@ -62,10 +133,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "flex-start",
   },
   map: {
     width: "100%",
-    height: "95%",
+    flex: 1,
   },
 });

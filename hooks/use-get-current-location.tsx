@@ -7,7 +7,7 @@ export default function useGetCurrentLocation() {
   React.useEffect(() => {
     const exec = async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
-      console.log("test", status);
+      // console.log("test", status);
 
       switch (status) {
         case Location.PermissionStatus.DENIED:
