@@ -1,3 +1,4 @@
+import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 
 export const LoginFormSchema = () =>
@@ -7,3 +8,5 @@ export const LoginFormSchema = () =>
   });
 
 export type LoginFormType = Yup.InferType<ReturnType<typeof LoginFormSchema>>;
+
+export type LoginFormMethod = ReturnType<typeof useForm<LoginFormType>>;

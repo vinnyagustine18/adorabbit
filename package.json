@@ -14,6 +14,8 @@
     "preset": "jest-expo"
   },
   "dependencies": {
+    "@ant-design/icons-react-native": "^2.3.2",
+    "@ant-design/react-native": "^5.0.5",
     "@expo/vector-icons": "^13.0.0",
     "@hookform/resolvers": "^3.3.2",
     "@react-native-firebase/app": "^18.6.1",
@@ -23,6 +25,7 @@
     "@shopify/flash-list": "^1.6.3",
     "@tanstack/react-query": "^5.8.3",
     "@types/invariant": "^2.2.37",
+    "babel-plugin-import": "^1.13.8",
     "expo": "~49.0.15",
     "expo-checkbox": "^2.5.0",
     "expo-font": "~11.4.0",
@@ -36,7 +39,6 @@
     "expo-web-browser": "~12.3.2",
     "invariant": "^2.2.4",
     "lodash": "^4.17.21",
-    "native-base": "^3.4.28",
     "patch-package": "^8.0.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -67,7 +69,9 @@
     "react-refresh": "~0.14.0"
   },
   "resolutions": {
-    "react-refresh": "~0.14.0"
+    "react-refresh": "~0.14.0",
+    "@babel/core": "^7.20.2",
+    "babel-loader": "8.3.0"
   },
   "private": true
 }

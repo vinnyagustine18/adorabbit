@@ -59,10 +59,10 @@ export default function Container(props: Props) {
       {bottomSafeArea && <SafeAreaView />}
     </KeyboardAvoidingView>
   ) : (
-    <View style={containerStyle}>
+    <SafeAreaView style={containerStyle}>
       {halfBackgroundContainer && <View style={styles.topBackground} />}
       {children}
-    </View>
+    </SafeAreaView>
   );
 }
 

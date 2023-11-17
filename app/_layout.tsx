@@ -4,11 +4,12 @@ import {
   DefaultTheme,
   ThemeProvider,
 } from "@react-navigation/native";
-import { useFonts } from "expo-font";
+import * as Font from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useColorScheme } from "react-native";
-import { NativeBaseProvider } from "native-base";
+import { Provider } from "@ant-design/react-native";
+import Toast from "react-native-toast-message";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -24,10 +25,30 @@ export const unstable_settings = {
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const [loaded, error] = useFonts({
+  const [loaded, error] = Font.useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
     ...FontAwesome.font,
   });
+
+  const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    const exec = async () => {
+      await Font.loadAsync(
+        "antoutline",
+        // eslint-disable-next-line
+        require("@ant-design/icons-react-native/fonts/antoutline.ttf")
+      );
+
+      await Font.loadAsync(
+        "antfill",
+        // eslint-disable-next-line
+        require("@ant-design/icons-react-native/fonts/antfill.ttf")
+      );
+      setIsReady(true);
+    };
+    exec();
+  }, []);
 
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
@@ -40,7 +61,7 @@ export default function RootLayout() {
     }
   }, [loaded]);
 
-  if (!loaded) {
+  if (!loaded && !isReady) {
     return null;
   }
 
@@ -52,12 +73,14 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <NativeBaseProvider>
+      <Provider>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+          <Stack.Screen name="register" options={{ headerShown: false }} />
         </Stack>
-      </NativeBaseProvider>
+        <Toast position="bottom" bottomOffset={20} />
+      </Provider>
     </ThemeProvider>
   );
 }
