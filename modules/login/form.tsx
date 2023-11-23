@@ -14,6 +14,8 @@ import Container from "../../components/container";
 import { Link, router } from "expo-router";
 import Toast from "../../components/toast";
 import useGetAuthAction from "../../hooks/use-get-auth-action";
+import Select from "../../components/element/select-input";
+import { ScrollView } from "react-native";
 
 interface Props {}
 
@@ -42,33 +44,44 @@ export default function LoginForm(props: Props) {
         justifyContent: "center",
       }}
     >
-      <Form methods={methods}>
-        <Text style={{ textAlign: "center", fontSize: 24, fontWeight: "600" }}>
-          Login Adorabbit
-        </Text>
-        <WhiteSpace size="xl" />
-        <View
-          style={{
-            paddingHorizontal: 16,
-          }}
-        >
-          <TextInput clear name="email" type="email-address" label="Email" />
-          <WhiteSpace size="lg" />
-          <TextInput clear name="password" type="password" label="Password" />
-          <WhiteSpace size="md" />
-          <Button
-            onPress={methods.handleSubmit(onSubmit as any)}
-            loading={methods.formState.isSubmitting}
-            type="primary"
+      <ScrollView>
+        <Form methods={methods}>
+          <Text
+            style={{ textAlign: "center", fontSize: 24, fontWeight: "600" }}
+          >
+            Adorabbit
+          </Text>
+          <WhiteSpace size="xl" />
+          <Text
+            style={{ textAlign: "center", fontSize: 24, fontWeight: "600" }}
           >
             Login
-          </Button>
-          <WhiteSpace size="lg" />
-          <Link href="/register" asChild>
-            <Button type="ghost">Register</Button>
-          </Link>
-        </View>
-      </Form>
+          </Text>
+          <WhiteSpace size="xl" />
+          <View
+            style={{
+              paddingHorizontal: 16,
+            }}
+          >
+            <TextInput clear name="email" type="email-address" label="Email" />
+            <WhiteSpace size="xl" />
+            <TextInput clear name="password" type="password" label="Password" />
+            <WhiteSpace size="xl" />
+            <Button
+              onPress={methods.handleSubmit(onSubmit as any)}
+              loading={methods.formState.isSubmitting}
+              type="primary"
+            >
+              Login
+            </Button>
+            <WhiteSpace size="lg" />
+            <Link href="/register" asChild>
+              <Button type="ghost">Register</Button>
+            </Link>
+          </View>
+          <WhiteSpace size="xl" />
+        </Form>
+      </ScrollView>
     </Container>
   );
 }

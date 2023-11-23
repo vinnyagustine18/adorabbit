@@ -1,6 +1,8 @@
 import { UseQueryOptions, useQuery } from "@tanstack/react-query";
-import { UserType } from "./model";
+import { UserModel } from "./model";
 import firestore from "@react-native-firebase/firestore";
+
+const collection = "users";
 
 const userKey = {
   listKey: "users",
@@ -9,18 +11,16 @@ const userKey = {
   detail: (id: string) => [userKey.detailKey, id],
 };
 
-const collection = "users";
-
-export function useGetUsers(options?: UseQueryOptions<UserType[]>) {
+export function useGetUsers(options?: UseQueryOptions<UserModel[]>) {
   return useQuery({
     queryKey: options?.queryKey ?? userKey.list(),
     queryFn: async () => {
       const result = await firestore().collection(collection).get();
-      const users: UserType[] = [];
+      const users: UserModel[] = [];
 
       result.forEach((result) => {
-        const user = result.data() as UserType;
-        users.push(user);
+        const user = result.data() as UserModel;
+        users.push({ ...user, id: result.id });
       });
 
       return users;
@@ -29,12 +29,12 @@ export function useGetUsers(options?: UseQueryOptions<UserType[]>) {
   });
 }
 
-export function useGetUser(id: string, options?: UseQueryOptions<UserType>) {
+export function useGetUser(id: string, options?: UseQueryOptions<UserModel>) {
   return useQuery({
     queryKey: options?.queryKey ?? userKey.list(),
     queryFn: async () => {
       const result = await firestore().collection(collection).doc(id).get();
-      return result.data() as UserType;
+      return { ...(result.data() as UserModel), id: result.id };
     },
     ...options,
   });

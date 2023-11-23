@@ -1,12 +1,15 @@
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 
-export const LoginFormSchema = () =>
+export const VacineFormSchema = () =>
   Yup.object({
-    email: Yup.string().email().required().default(""),
-    password: Yup.string().required().default(""),
+    vacineAt: Yup.date().required().default(new Date()),
+    // drug table
+    drugId: Yup.string().required().default(""),
+    // rabbit table
+    rabbitId: Yup.string().required().default(""),
   });
 
-export type LoginFormType = Yup.InferType<ReturnType<typeof LoginFormSchema>>;
+export type VacineFormType = Yup.InferType<ReturnType<typeof VacineFormSchema>>;
 
-export type LoginFormMethod = ReturnType<typeof useForm<LoginFormType>>;
+export type VacineFormMethod = ReturnType<typeof useForm<VacineFormType>>;

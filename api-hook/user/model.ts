@@ -3,7 +3,13 @@ export enum UserTypeEnum {
   seller = "seller",
 }
 
-export type UserType = {
+export enum GenderEnum {
+  male = "male",
+  female = "female",
+}
+
+export type UserModel = {
+  id: string;
   address: string;
   email: string;
   latitude: number;

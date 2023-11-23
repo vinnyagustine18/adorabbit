@@ -59,36 +59,47 @@ export default function RegisterForm() {
   }, []);
 
   const { back, next, onClickBack, onClickNext, title } = React.useMemo(() => {
-    switch (step) {
-      case RegisterStepEnum.email:
-        return {
-          title: "First Step",
-          back: "",
-          next: "Next",
-          onClickNext: () => {
-            trigger(["email", "password", "passwordConfirmation"]);
-            setStep(RegisterStepEnum.address);
-          },
-          onClickBack: () => {},
-        };
-      case RegisterStepEnum.address:
-        return {
-          title: "Final Step",
-          back: "Back",
-          next: "Save",
-          onClickNext: () => {
-            methods.handleSubmit(onSubmit as any)();
-          },
-          onClickBack: () => {
-            setStep(RegisterStepEnum.email);
-          },
-        };
-    }
+    return {
+      title: "Register",
+      back: "",
+      next: "Save",
+      onClickNext: () => {
+        methods.handleSubmit(onSubmit as any)();
+      },
+      onClickBack: () => {},
+    };
+    // switch (step) {
+    //   case RegisterStepEnum.email:
+    //     return {
+    //       title: "First Step",
+    //       back: "",
+    //       next: "Next",
+    //       onClickNext: () => {
+    //         trigger(["email", "password", "passwordConfirmation"]);
+    //         setStep(RegisterStepEnum.address);
+    //       },
+    //       onClickBack: () => {},
+    //     };
+    //   case RegisterStepEnum.address:
+    //     return {
+    //       title: "Final Step",
+    //       back: "Back",
+    //       next: "Save",
+    //       onClickNext: () => {
+    //         methods.handleSubmit(onSubmit as any)();
+    //       },
+    //       onClickBack: () => {
+    //         setStep(RegisterStepEnum.email);
+    //       },
+    //     };
+    // }
   }, [step, trigger, setStep, methods]);
 
   const compoenents = React.useCallback(() => {
     switch (step) {
       case RegisterStepEnum.email:
+      case RegisterStepEnum.address:
+      default:
         return (
           <>
             <TextInput name="name" label="Full Name" placeholder="fill name" />
@@ -158,22 +169,20 @@ export default function RegisterForm() {
             <WhiteSpace size="xl" />
           </>
         );
-      case RegisterStepEnum.address:
-      default:
-        return (
-          <AddressComponent
-            onChange={(values) => {
-              setValue("latitude", values.latitude);
-              setValue("longitude", values.longitude);
-              setValue("address", values.address);
-            }}
-            value={{
-              address: methods.getValues("address"),
-              latitude: methods.getValues("latitude"),
-              longitude: methods.getValues("longitude"),
-            }}
-          />
-        );
+      // return (
+      //   <AddressComponent
+      //     onChange={(values) => {
+      //       setValue("latitude", values.latitude);
+      //       setValue("longitude", values.longitude);
+      //       setValue("address", values.address);
+      //     }}
+      //     value={{
+      //       address: methods.getValues("address"),
+      //       latitude: methods.getValues("latitude"),
+      //       longitude: methods.getValues("longitude"),
+      //     }}
+      //   />
+      // );
     }
   }, [step]);
 
