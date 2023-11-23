@@ -5,21 +5,24 @@ import { useForm } from "react-hook-form";
 import Form from "../../components/form";
 
 import auth from "@react-native-firebase/auth";
-import Toast from "react-native-toast-message";
+
 import { Button, WhiteSpace } from "@ant-design/react-native";
 import TextInput from "../../components/element/text-input";
 
 import { Text, View } from "../../components/themed";
 import Container from "../../components/container";
 import { Link, router } from "expo-router";
+import Toast from "../../components/toast";
+import useGetAuthAction from "../../hooks/use-get-auth-action";
 
 interface Props {}
 
 export default function LoginForm(props: Props) {
+  const { onLogin } = useGetAuthAction();
   const defaultValues = React.useMemo<LoginFormType>(() => {
     return {
-      email: "vinnyagustineee18@gmail.com",
-      password: "secret123",
+      email: "",
+      password: "",
     };
   }, []);
   const resolver = useYupValidationResolver(LoginFormSchema());
@@ -30,29 +33,7 @@ export default function LoginForm(props: Props) {
   });
 
   const onSubmit = React.useCallback(async (values: LoginFormType) => {
-    try {
-      const result = await auth().signInWithEmailAndPassword(
-        values.email,
-        values.password
-      );
-      Toast.show({
-        autoHide: true,
-        type: "success",
-        position: "top",
-        text1: "Login Success",
-      });
-
-      router.replace("/(tabs)/");
-    } catch (error: any) {
-      if (error.code === "auth/email-already-in-use") {
-        console.log("That email address is already in use!");
-      }
-
-      if (error.code === "auth/invalid-email") {
-        console.log("That email address is invalid!");
-      }
-      console.log(error);
-    }
+    await onLogin(values);
   }, []);
 
   return (

@@ -1,8 +1,9 @@
 import * as React from "react";
-import { View, ActivityIndicator, StyleSheet, Button } from "../elements";
 import sizeConstant from "../../constants/size.constant";
 import colorConstant from "../../constants/color.constant";
-import { Text } from "../themed";
+import { Text, View } from "../themed";
+import { ActivityIndicator, Button } from "@ant-design/react-native";
+import { StyleSheet } from "react-native";
 
 interface Props {
   isLoading?: boolean;
@@ -33,7 +34,7 @@ export default function EmptyViewComponent(props: Props) {
         ) : (
           <View style={styles.refreshContainer}>
             <Button
-              variant="primary"
+              type="primary"
               style={styles.button}
               onPress={() => {
                 refetch && refetch();

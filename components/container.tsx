@@ -70,6 +70,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colorConstant.white,
+    paddingTop: 24,
   },
   topBackground: {
     position: "absolute",

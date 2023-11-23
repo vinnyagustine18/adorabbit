@@ -15,19 +15,25 @@ interface Props {
     longitudeDelta: number;
     address: string;
   }) => void;
+  value?: {
+    latitude: number;
+    longitude: number;
+    address: string;
+  };
 }
 
 export default function AddressComponent(props: Props) {
   const { location } = useGetCurrentLocation();
 
   const [region, setRegion] = React.useState({
-    latitude: location?.coords?.latitude ?? 37.4226711,
-    longitude: location?.coords?.longitude ?? -122.0849872,
+    latitude: props.value?.latitude ?? location?.coords?.latitude ?? 37.4226711,
+    longitude:
+      props.value?.longitude ?? location?.coords?.longitude ?? -122.0849872,
     latitudeDelta: 0.005,
     longitudeDelta: 0.005,
   });
   const [isBuffer, setIsBuffer] = React.useState(false);
-  const [address, setAddress] = React.useState("");
+  const [address, setAddress] = React.useState(props.value?.address ?? "");
 
   const onGenerateAddress = React.useCallback(
     async ({
@@ -44,7 +50,7 @@ export default function AddressComponent(props: Props) {
 
         const response = await request.json();
 
-        const address = response.results?.[0]?.formatted_address;
+        const address = response?.results?.[0]?.formatted_address;
         setAddress(address);
       } catch (e) {
         console.log(e);

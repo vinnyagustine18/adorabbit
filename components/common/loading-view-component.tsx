@@ -1,6 +1,8 @@
+import { ActivityIndicator } from "@ant-design/react-native";
 import colorConstant from "../../constants/color.constant";
 import sizeConstant from "../../constants/size.constant";
-import { View, ActivityIndicator, StyleSheet } from "../elements";
+import { View } from "../themed";
+import { StyleSheet } from "react-native";
 
 interface Props {
   noPadding?: boolean;

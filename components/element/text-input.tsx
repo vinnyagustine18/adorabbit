@@ -39,7 +39,7 @@ export default function TextInput(props: TextInputProps) {
       )}
       <InputItem
         {...field}
-        value={field.value}
+        value={field.value.toString()}
         onChange={(value) =>
           setValue(name, value, { shouldValidate: true, shouldTouch: true })
         }

@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { useColorScheme } from "react-native";
 import { Provider } from "@ant-design/react-native";
 import Toast from "react-native-toast-message";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -70,17 +71,30 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
-
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: false,
+        refetchOnWindowFocus: false,
+        // staleTime: 30 * 1000,
+      },
+      mutations: {
+        retry: false,
+      },
+    },
+  });
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <Provider>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="modal" options={{ presentation: "modal" }} />
-          <Stack.Screen name="register" options={{ headerShown: false }} />
-        </Stack>
-        <Toast position="bottom" bottomOffset={20} />
-      </Provider>
+      <QueryClientProvider client={queryClient}>
+        <Provider>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+            <Stack.Screen name="register" options={{ headerShown: false }} />
+          </Stack>
+          <Toast position="top" topOffset={20} />
+        </Provider>
+      </QueryClientProvider>
     </ThemeProvider>
   );
 }
