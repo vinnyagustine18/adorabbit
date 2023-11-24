@@ -11,7 +11,7 @@ const typeKey = {
   detail: (id: string) => [typeKey.detailKey, id],
 };
 
-export function useGetDrugs(options?: UseQueryOptions<TypeModel[]>) {
+export function useGetTypes(options?: UseQueryOptions<TypeModel[]>) {
   return useQuery({
     queryKey: options?.queryKey ?? typeKey.list(),
     queryFn: async () => {
@@ -29,9 +29,9 @@ export function useGetDrugs(options?: UseQueryOptions<TypeModel[]>) {
   });
 }
 
-export function useGetDrug(id: string, options?: UseQueryOptions<TypeModel>) {
+export function useGetType(id: string, options?: UseQueryOptions<TypeModel>) {
   return useQuery({
-    queryKey: options?.queryKey ?? typeKey.list(),
+    queryKey: options?.queryKey ?? typeKey.detail(id),
     queryFn: async () => {
       const result = await firestore().collection(collection).doc(id).get();
       return { ...(result.data() as TypeModel), id: result.id };

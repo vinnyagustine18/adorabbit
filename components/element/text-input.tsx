@@ -29,6 +29,7 @@ export default function TextInput(props: TextInputProps) {
           style={{
             marginLeft: 16,
             fontSize: 14,
+            marginBottom: 8,
             fontWeight: "600",
           }}
         >
@@ -37,6 +38,7 @@ export default function TextInput(props: TextInputProps) {
       ) : (
         label
       )}
+
       <InputItem
         {...field}
         value={field.value.toString()}

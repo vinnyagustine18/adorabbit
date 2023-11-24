@@ -17,7 +17,7 @@ export default function LoadingViewComponent(props: Props) {
         { height: props.loadingViewHeight || 300 },
       ]}
     >
-      <ActivityIndicator color={colorConstant.primaryOrange1} size="large" />
+      <ActivityIndicator color={colorConstant.blueDefault} size="large" />
     </View>
   );
 }

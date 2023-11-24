@@ -237,7 +237,10 @@ export default function RegisterForm() {
             style={{ flex: 1, marginHorizontal: 16 }}
             onPress={onClickNext}
             loading={methods.formState.isSubmitting}
-            disabled={!isEmpty(methods.formState.errors)}
+            disabled={
+              !isEmpty(methods.formState.errors) ||
+              methods.formState.isSubmitting
+            }
             type="primary"
           >
             {next}
