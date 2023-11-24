@@ -5,13 +5,13 @@ import { Button } from "@ant-design/react-native";
 import React from "react";
 import Toast from "../../components/toast";
 import useGetAuthAction from "../../hooks/use-get-auth-action";
+import Profile from "../../modules/profil/profil";
 
 export default function TabTwoScreen() {
-  const { isLoading, user, onCreateUser, onLogin, onSignOut } =
-    useGetAuthAction();
+  const { user, onSignOut } = useGetAuthAction();
 
   if (user) {
-    return <Button onPress={onSignOut}>Logout</Button>;
+    return <Profile />;
   }
   return (
     <Container>

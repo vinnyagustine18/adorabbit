@@ -25,7 +25,7 @@ enum RegisterStepEnum {
 
 export default function RegisterForm() {
   const { location } = useGetCurrentLocation();
-  const { onCreateUser } = useGetAuthAction();
+  const { onCreateUser, onSignOut } = useGetAuthAction();
   const [step, setStep] = React.useState<RegisterStepEnum>(
     RegisterStepEnum.email
   );

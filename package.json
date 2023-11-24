@@ -38,6 +38,7 @@
     "expo-system-ui": "~2.4.0",
     "expo-updates": "~0.18.17",
     "expo-web-browser": "~12.3.2",
+    "geolib": "^3.3.4",
     "invariant": "^2.2.4",
     "lodash": "^4.17.21",
     "patch-package": "^8.0.0",

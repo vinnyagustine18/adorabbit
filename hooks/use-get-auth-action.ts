@@ -38,6 +38,7 @@ export default function useGetAuthAction() {
         Toast.success("Register Successful");
         router.replace("/profile");
       } catch (e) {
+        console.log(e);
         Toast.error(JSON.stringify(e));
       } finally {
         setInitializing(false);
@@ -57,6 +58,7 @@ export default function useGetAuthAction() {
       Toast.success("Login Successful");
       router.replace("/(tabs)/");
     } catch (e) {
+      console.log(e);
       Toast.error(JSON.stringify(e));
     } finally {
       setInitializing(false);

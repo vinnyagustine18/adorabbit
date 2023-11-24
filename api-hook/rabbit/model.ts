@@ -1,5 +1,5 @@
 import { TypeModel } from "../type/model";
-import { GenderEnum } from "../user/model";
+import { GenderEnum, UserModel } from "../user/model";
 
 export enum RabbitStatusEnum {
   alive = "alive",
@@ -23,4 +23,7 @@ export type RabbitModel = {
 
   //type table
   type: TypeModel;
+
+  //user table
+  user: UserModel;
 };

@@ -87,10 +87,9 @@ function RootLayoutNav() {
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <QueryClientProvider client={queryClient}>
         <Provider>
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="(tabs)" />
             <Stack.Screen name="modal" options={{ presentation: "modal" }} />
-            <Stack.Screen name="register" options={{ headerShown: false }} />
           </Stack>
           <Toast position="top" topOffset={20} />
         </Provider>

@@ -3,6 +3,7 @@ import { Link, Tabs } from "expo-router";
 import { Pressable, useColorScheme } from "react-native";
 
 import Colors from "../../constants/Colors";
+import useGetAuthAction from "../../hooks/use-get-auth-action";
 /**
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
  */
@@ -15,7 +16,7 @@ function TabBarIcon(props: {
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
-
+  const { user } = useGetAuthAction();
   return (
     <Tabs
       screenOptions={{
@@ -44,9 +45,19 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="transaction"
+        options={{
+          title: "Transaction",
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="file-text" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="profile"
         options={{
           title: "Profile",
+          headerShown: false,
           tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
         }}
       />
