@@ -4,31 +4,34 @@ import TypeForm from "./components/form";
 import FetchWrapperComponent from "../../components/common/fetch-wrapper-component";
 import { ActivityIndicator } from "@ant-design/react-native";
 import React from "react";
-import { TypeFormMethod, TypeFormType } from "./components/form-type";
+
 import firestore from "@react-native-firebase/firestore";
 import Toast from "../../components/toast";
 import Container from "../../components/container";
 import useGetAuthAction from "../../hooks/use-get-auth-action";
+import { useGetRabbit } from "../../api-hook/rabbit/query";
+import { RabbitFormMethod, RabbitFormType } from "./components/form-type";
+import RabbitForm from "./components/form";
+import { getSubmitData } from "./utils";
 
-export default function TypeShow() {
+export default function RabbitShow() {
   const params = useLocalSearchParams();
   const { id } = params as any;
 
   const { user } = useGetAuthAction();
   const userId = user?.uid;
 
-  const query = useGetType(id);
-  const type = query.data;
+  const query = useGetRabbit(id);
+  const rabbit = query.data;
 
   const onSubmit = React.useCallback(
-    async (values: TypeFormType, form: TypeFormMethod) => {
+    async (values: RabbitFormType, form: RabbitFormMethod) => {
+      const rabbit = await getSubmitData(values, userId!);
+
       const result = await firestore()
-        .collection("types")
+        .collection("rabbits")
         .doc(query.data?.id!)
-        .update({
-          ...values,
-          userId,
-        });
+        .update(rabbit);
 
       Toast.success("Data Berhasil diubah");
       router.back();
@@ -45,7 +48,7 @@ export default function TypeShow() {
         error={query.error?.message}
         isLoading={query.isFetching}
         loadingComponent={<ActivityIndicator />}
-        component={<TypeForm type={type} onSubmit={onSubmit} />}
+        component={<RabbitForm rabbit={rabbit} onSubmit={onSubmit} />}
       />
     </Container>
   );

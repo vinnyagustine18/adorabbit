@@ -7,4 +7,6 @@ export type VacineModel = {
 
   drug: DrugModel;
   rabbit: RabbitModel;
+
+  userId: string;
 };

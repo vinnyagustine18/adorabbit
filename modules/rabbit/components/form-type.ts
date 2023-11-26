@@ -15,7 +15,7 @@ export const RabbitFormSchema = () =>
     ownershipStatus: Yup.string()
       .required()
       .default(RabbitOwnershipEnum.collection),
-    price: Yup.number().positive().required(),
+    price: Yup.number().min(0).required(),
     description: Yup.string().default(""),
     birthAt: Yup.date().required().default(new Date()),
     // type table

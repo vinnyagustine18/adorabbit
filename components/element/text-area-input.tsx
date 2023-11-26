@@ -1,27 +1,17 @@
 import { useController, useFormContext } from "react-hook-form";
-import RNPickerSelect, { PickerSelectProps } from "react-native-picker-select";
 import { useFormState } from "../form/form";
 import { Text } from "../themed";
 import colorConstant from "../../constants/color.constant";
-import React from "react";
+import { TextareaItem } from "@ant-design/react-native";
+import { TextareaItemProps } from "@ant-design/react-native/lib/textarea-item";
 
-export interface SelectInputProps
-  extends Omit<PickerSelectProps, "onValueChange"> {
+interface Props extends TextareaItemProps {
   name: string;
   label?: React.ReactNode | string;
-  onAfterDetailChange?: (item: any) => void;
-  onAfterChange?: (item: any) => void;
 }
 
-export default function Select(props: SelectInputProps) {
-  const {
-    name,
-    label,
-    disabled,
-    items,
-    useNativeAndroidPickerStyle = true,
-    ...rest
-  } = props;
+export default function TextAreaInput(props: Props) {
+  const { name, label, disabled, rows = 4, ...rest } = props;
   const { control } = useFormContext();
   const { field, fieldState } = useController({
     name,
@@ -29,12 +19,6 @@ export default function Select(props: SelectInputProps) {
   });
   const { editable } = useFormState();
   const _disabled = !editable || disabled;
-
-  React.useEffect(() => {
-    const item = items.find((item) => field.value === item.value);
-    props.onAfterDetailChange?.(item);
-  }, [field.value, items]);
-
   return (
     <>
       {!!label && typeof label === "string" ? (
@@ -43,6 +27,7 @@ export default function Select(props: SelectInputProps) {
             marginLeft: 16,
             fontSize: 14,
             fontWeight: "600",
+            marginBottom: 16,
           }}
         >
           {label}
@@ -50,17 +35,16 @@ export default function Select(props: SelectInputProps) {
       ) : (
         label
       )}
-      <RNPickerSelect
+      <TextareaItem
         {...rest}
-        items={items}
-        useNativeAndroidPickerStyle={useNativeAndroidPickerStyle}
-        value={field.value}
-        onValueChange={(value, index) => {
-          const item = items[index];
-          props.onAfterChange?.(item);
-          field.onChange(value);
-        }}
+        {...field}
+        rows={rows}
         disabled={_disabled}
+        style={
+          rest.style ?? {
+            marginLeft: 8,
+          }
+        }
       />
       {!!fieldState.error?.message && (
         <Text

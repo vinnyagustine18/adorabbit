@@ -2,7 +2,7 @@ import InputItem, {
   InputItemProps,
 } from "@ant-design/react-native/lib/input-item";
 import { useController, useFormContext } from "react-hook-form";
-import { useFormState } from "../form";
+import { useFormState } from "../form/form";
 
 import colorConstant from "../../constants/color.constant";
 import { Text } from "../themed";

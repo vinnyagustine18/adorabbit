@@ -7,4 +7,6 @@ export type MateModel = {
 
   maleRabbit: RabbitModel;
   femaleRabbit: RabbitModel;
+
+  userId: string;
 };

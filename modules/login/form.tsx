@@ -2,7 +2,7 @@ import React from "react";
 import { LoginFormSchema, LoginFormType } from "./form-type";
 import useYupValidationResolver from "../../hooks/use-yup-validation-resolver";
 import { useForm } from "react-hook-form";
-import Form from "../../components/form";
+import Form from "../../components/form/form";
 
 import auth from "@react-native-firebase/auth";
 

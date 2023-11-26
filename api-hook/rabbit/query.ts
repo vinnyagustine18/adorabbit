@@ -34,7 +34,7 @@ export function useGetRabbit(
   options?: UseQueryOptions<RabbitModel>
 ) {
   return useQuery({
-    queryKey: options?.queryKey ?? rabbitKey.list(),
+    queryKey: options?.queryKey ?? rabbitKey.detail(id),
     queryFn: async () => {
       const result = await firestore().collection(collection).doc(id).get();
       return { ...(result.data() as RabbitModel), id: result.id };

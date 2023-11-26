@@ -34,7 +34,10 @@ export default function useGetAuthAction() {
           rest.password
         );
         const id = result.user.uid;
-        await firestore().collection("users").doc(id).set(rest);
+        await firestore()
+          .collection("users")
+          .doc(id)
+          .set({ ...rest, id: result.user.uid });
         Toast.success("Register Successful");
         router.replace("/profile");
       } catch (e) {

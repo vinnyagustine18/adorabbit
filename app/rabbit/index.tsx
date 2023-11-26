@@ -1,9 +1,5 @@
-import { Text, View } from "../../components/themed";
+import RabbitList from "../../modules/rabbit/list";
 
 export default function RabbitListScreen() {
-  return (
-    <View>
-      <Text>Rabbit List</Text>
-    </View>
-  );
+  return <RabbitList />;
 }

@@ -1,0 +1,12 @@
+diff --git a/node_modules/react-native-picker-select/index.d.ts b/node_modules/react-native-picker-select/index.d.ts
+index c231901..e86bdc9 100644
+--- a/node_modules/react-native-picker-select/index.d.ts
++++ b/node_modules/react-native-picker-select/index.d.ts
+@@ -20,6 +20,7 @@ export interface Item {
+      * If falsy, label is used
+      */
+     inputLabel?: string;
++    [x:string]:any
+ }
+ 
+ export interface PickerStyle {

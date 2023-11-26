@@ -20,6 +20,7 @@ export function useGetTypes(options?: UseQueryOptions<TypeModel[]>) {
 
       result.forEach((result) => {
         const user = result.data() as TypeModel;
+
         users.push({ ...user, id: result.id });
       });
 

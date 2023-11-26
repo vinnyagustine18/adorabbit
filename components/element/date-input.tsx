@@ -1,39 +1,33 @@
 import { useController, useFormContext } from "react-hook-form";
-import RNPickerSelect, { PickerSelectProps } from "react-native-picker-select";
-import { useFormState } from "../form/form";
 import { Text } from "../themed";
 import colorConstant from "../../constants/color.constant";
-import React from "react";
+import { DatePicker, List } from "@ant-design/react-native";
+import { DatePickerProps } from "@ant-design/react-native/lib/date-picker";
+import { useFormState } from "../form/form";
 
-export interface SelectInputProps
-  extends Omit<PickerSelectProps, "onValueChange"> {
+interface Props extends DatePickerProps {
   name: string;
   label?: React.ReactNode | string;
-  onAfterDetailChange?: (item: any) => void;
-  onAfterChange?: (item: any) => void;
+  placeholder?: string;
 }
 
-export default function Select(props: SelectInputProps) {
+export default function DateInput(props: Props) {
   const {
     name,
     label,
+    format = "YYYY-MM-DD",
     disabled,
-    items,
-    useNativeAndroidPickerStyle = true,
+    placeholder = "Select Date",
+    mode = "date",
     ...rest
   } = props;
   const { control } = useFormContext();
   const { field, fieldState } = useController({
-    name,
     control,
+    name,
   });
   const { editable } = useFormState();
   const _disabled = !editable || disabled;
-
-  React.useEffect(() => {
-    const item = items.find((item) => field.value === item.value);
-    props.onAfterDetailChange?.(item);
-  }, [field.value, items]);
 
   return (
     <>
@@ -42,6 +36,7 @@ export default function Select(props: SelectInputProps) {
           style={{
             marginLeft: 16,
             fontSize: 14,
+            marginBottom: 16,
             fontWeight: "600",
           }}
         >
@@ -50,18 +45,27 @@ export default function Select(props: SelectInputProps) {
       ) : (
         label
       )}
-      <RNPickerSelect
+      <DatePicker
         {...rest}
-        items={items}
-        useNativeAndroidPickerStyle={useNativeAndroidPickerStyle}
+        {...field}
         value={field.value}
-        onValueChange={(value, index) => {
-          const item = items[index];
-          props.onAfterChange?.(item);
-          field.onChange(value);
-        }}
+        format={format}
+        onChange={(value) => field.onChange(value)}
         disabled={_disabled}
-      />
+        mode={mode}
+      >
+        <List.Item arrow="horizontal">
+          {
+            <Text
+              style={{
+                fontWeight: "600",
+              }}
+            >
+              {placeholder}
+            </Text>
+          }
+        </List.Item>
+      </DatePicker>
       {!!fieldState.error?.message && (
         <Text
           style={{

@@ -1,5 +1,5 @@
 import React from "react";
-import Form from "../../components/form";
+import Form from "../../components/form/form";
 import { RegisterFormSchema, RegisterFormType } from "./form-type";
 import useYupValidationResolver from "../../hooks/use-yup-validation-resolver";
 import { useForm } from "react-hook-form";
