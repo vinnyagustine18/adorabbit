@@ -1,36 +1,29 @@
-import { List } from "@ant-design/react-native";
+import { Divider, List } from "react-native-paper";
 import React from "react";
 import { ScrollView } from "react-native";
 import useGetAuthAction from "../../hooks/use-get-auth-action";
 import { router } from "expo-router";
+import Container from "../../components/container";
 
 export default function Profile() {
   const { onSignOut, isLoading } = useGetAuthAction();
   return (
-    <ScrollView
-      style={{
-        marginTop: 24,
-      }}
-    >
-      <List renderHeader="User">
-        <List.Item arrow="empty">Edit Profile</List.Item>
-      </List>
-      <List renderHeader="Management">
-        <List.Item arrow="empty" onPress={() => router.push("/rabbit/")}>
-          Rabbit List
-        </List.Item>
-        <List.Item arrow="empty" onPress={() => router.push("/type/")}>
-          Type List
-        </List.Item>
-        <List.Item arrow="empty">Drug List</List.Item>
-        <List.Item arrow="empty">Birth List</List.Item>
-        <List.Item arrow="empty">Mate List</List.Item>
-      </List>
-      <List renderHeader="Management">
-        <List.Item arrow="empty" onPress={onSignOut}>
-          Logout
-        </List.Item>
-      </List>
-    </ScrollView>
+    <Container>
+      <ScrollView>
+        <List.Section>
+          <List.Subheader>User</List.Subheader>
+          <List.Item title="Edit Profile" />
+          <Divider />
+          <List.Subheader>Management</List.Subheader>
+          <List.Item title="Type List" onPress={() => router.push("/type/")} />
+          <List.Item
+            title="Rabbit List"
+            onPress={() => router.push("/rabbit/")}
+          />
+          <Divider />
+          <List.Item title="Logout" onPress={onSignOut} />
+        </List.Section>
+      </ScrollView>
+    </Container>
   );
 }

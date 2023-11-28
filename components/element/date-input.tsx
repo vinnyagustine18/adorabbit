@@ -1,24 +1,30 @@
 import { useController, useFormContext } from "react-hook-form";
-import { Text } from "../themed";
+import { Text, View } from "../themed";
 import colorConstant from "../../constants/color.constant";
-import { DatePicker, List } from "@ant-design/react-native";
-import { DatePickerProps } from "@ant-design/react-native/lib/date-picker";
-import { useFormState } from "../form/form";
 
-interface Props extends DatePickerProps {
+import { useFormState } from "../form/form";
+import { DatePickerInput } from "react-native-paper-dates";
+import { DatePickerInputProps } from "react-native-paper-dates/lib/typescript/Date/DatePickerInput.shared";
+import { HelperText } from "react-native-paper";
+
+interface Props
+  extends Omit<
+    DatePickerInputProps,
+    "value" | "onChange" | "inputMode" | "locale"
+  > {
   name: string;
-  label?: React.ReactNode | string;
-  placeholder?: string;
+  inputMode?: DatePickerInputProps["inputMode"];
+  locale?: DatePickerInputProps["locale"];
 }
 
 export default function DateInput(props: Props) {
   const {
     name,
     label,
-    format = "YYYY-MM-DD",
     disabled,
     placeholder = "Select Date",
-    mode = "date",
+    locale = "en",
+    inputMode = "start",
     ...rest
   } = props;
   const { control } = useFormContext();
@@ -26,58 +32,24 @@ export default function DateInput(props: Props) {
     control,
     name,
   });
+
   const { editable } = useFormState();
   const _disabled = !editable || disabled;
 
   return (
-    <>
-      {!!label && typeof label === "string" ? (
-        <Text
-          style={{
-            marginLeft: 16,
-            fontSize: 14,
-            marginBottom: 16,
-            fontWeight: "600",
-          }}
-        >
-          {label}
-        </Text>
-      ) : (
-        label
-      )}
-      <DatePicker
+    <View>
+      <DatePickerInput
         {...rest}
         {...field}
+        inputMode={inputMode}
+        locale={locale}
         value={field.value}
-        format={format}
         onChange={(value) => field.onChange(value)}
         disabled={_disabled}
-        mode={mode}
-      >
-        <List.Item arrow="horizontal">
-          {
-            <Text
-              style={{
-                fontWeight: "600",
-              }}
-            >
-              {placeholder}
-            </Text>
-          }
-        </List.Item>
-      </DatePicker>
-      {!!fieldState.error?.message && (
-        <Text
-          style={{
-            color: colorConstant.redDefault,
-            fontSize: 11,
-            fontWeight: "200",
-            marginLeft: 16,
-          }}
-        >
-          {fieldState.error?.message}
-        </Text>
-      )}
-    </>
+      />
+      <HelperText type="error" visible={!!fieldState.error?.message}>
+        {fieldState.error?.message}
+      </HelperText>
+    </View>
   );
 }

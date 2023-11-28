@@ -3,4 +3,6 @@ export type TypeModel = {
   name: string;
 
   userId: string;
+
+  key: string;
 };

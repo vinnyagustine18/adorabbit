@@ -4,24 +4,17 @@ import firestore from "@react-native-firebase/firestore";
 
 export async function getSubmitData(values: RabbitFormType, userId: string) {
   const { typeId, ...rest } = values;
+
   //get the type
-  //   console.log(typeId);
-  const _type = await firestore().collection("types").doc(typeId).get();
-  const type = { ..._type.data() };
+  const type = (await firestore().doc(`types/${typeId}`).get()).data();
 
-  //   //get the user
-  const _user = await firestore().collection("users").doc(userId!).get();
-
-  const user = {
-    ...(_user.data() as UserModel),
-    id: _user.id,
-  };
-
-  const { password, ...restUser } = user;
+  //get the user
+  const _user = (
+    await firestore().doc(`users/${userId}`).get()
+  ).data() as UserModel;
 
   //extract the password
-  //   const { password, ...user } = _user!;
-  return { ...rest, type, user: restUser };
+  const { password, ...user } = _user;
 
-  //   return { ...rest, type, user };
+  return { ...rest, type, user };
 }

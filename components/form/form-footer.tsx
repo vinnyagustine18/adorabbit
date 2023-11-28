@@ -1,7 +1,7 @@
 import { useFormContext } from "react-hook-form";
 import { useFormState } from "./form";
 import { View } from "../themed";
-import { Button } from "@ant-design/react-native";
+import { Button } from "react-native-paper";
 import colorConstant from "../../constants/color.constant";
 
 interface Props {
@@ -29,18 +29,15 @@ export default function FormFooter(props: Props) {
           <>
             {editable && !!data ? (
               <Button
+                buttonColor={colorConstant.redDefault}
+                textColor={colorConstant.white}
                 style={{ flex: 1 }}
-                type="warning"
                 onPress={() => setIsEditable(false)}
               >
                 Cancel
               </Button>
             ) : (
-              <Button
-                type="ghost"
-                style={{ flex: 1 }}
-                onPress={() => setIsEditable(true)}
-              >
+              <Button style={{ flex: 1 }} onPress={() => setIsEditable(true)}>
                 Edit
               </Button>
             )}
@@ -48,11 +45,11 @@ export default function FormFooter(props: Props) {
         )}
         {editable && (
           <Button
+            mode="contained"
             onPress={methods.handleSubmit(onSubmit)}
             loading={methods.formState.isSubmitting}
             disabled={methods.formState.isSubmitting}
             style={{ flex: 1 }}
-            type="primary"
           >
             Save
           </Button>

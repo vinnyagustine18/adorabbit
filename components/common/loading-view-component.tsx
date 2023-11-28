@@ -1,4 +1,4 @@
-import { ActivityIndicator } from "@ant-design/react-native";
+import { ActivityIndicator } from "react-native-paper";
 import colorConstant from "../../constants/color.constant";
 import sizeConstant from "../../constants/size.constant";
 import { View } from "../themed";

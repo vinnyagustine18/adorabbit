@@ -1,27 +1,36 @@
 import { useController, useFormContext } from "react-hook-form";
-import RNPickerSelect, { PickerSelectProps } from "react-native-picker-select";
+
 import { useFormState } from "../form/form";
-import { Text } from "../themed";
+import { Text, View } from "../themed";
 import colorConstant from "../../constants/color.constant";
 import React from "react";
+import DropDown, { DropDownPropsInterface } from "react-native-paper-dropdown";
+import { HelperText, TextInput } from "react-native-paper";
 
-export interface SelectInputProps
-  extends Omit<PickerSelectProps, "onValueChange"> {
-  name: string;
-  label?: React.ReactNode | string;
-  onAfterDetailChange?: (item: any) => void;
-  onAfterChange?: (item: any) => void;
+export interface ListType {
+  label: string;
+  value: string | number;
+  [x: string]: any;
 }
 
+export interface SelectInputProps
+  extends Omit<
+    DropDownPropsInterface,
+    "visible" | "onDismiss" | "showDropDown" | "value" | "setValue" | "list"
+  > {
+  name: string;
+  onAfterDetailChange?: (item: any) => void;
+  onAfterChange?: (item: any) => void;
+  disabled?: boolean;
+  list: ListType[];
+}
+
+export interface CustomSelectInputProps
+  extends Omit<SelectInputProps, "list"> {}
+
 export default function Select(props: SelectInputProps) {
-  const {
-    name,
-    label,
-    disabled,
-    items,
-    useNativeAndroidPickerStyle = true,
-    ...rest
-  } = props;
+  const [visible, setVisible] = React.useState<boolean>(false);
+  const { name, label, list, disabled, ...rest } = props;
   const { control } = useFormContext();
   const { field, fieldState } = useController({
     name,
@@ -31,49 +40,42 @@ export default function Select(props: SelectInputProps) {
   const _disabled = !editable || disabled;
 
   React.useEffect(() => {
-    const item = items.find((item) => field.value === item.value);
+    const item = list.find((item) => field.value === item.value);
     props.onAfterDetailChange?.(item);
-  }, [field.value, items]);
+  }, [field.value, list, props.onAfterDetailChange]);
+
+  if (_disabled) {
+    const item = list.find((_item) => field.value === _item.value);
+    return (
+      <View>
+        <TextInput
+          {...rest}
+          label={label}
+          disabled={_disabled}
+          value={item?.label ?? ""}
+        />
+        <HelperText type="error" visible={!!fieldState.error?.message}>
+          {fieldState.error?.message}
+        </HelperText>
+      </View>
+    );
+  }
 
   return (
-    <>
-      {!!label && typeof label === "string" ? (
-        <Text
-          style={{
-            marginLeft: 16,
-            fontSize: 14,
-            fontWeight: "600",
-          }}
-        >
-          {label}
-        </Text>
-      ) : (
-        label
-      )}
-      <RNPickerSelect
+    <View>
+      <DropDown
         {...rest}
-        items={items}
-        useNativeAndroidPickerStyle={useNativeAndroidPickerStyle}
+        label={label}
+        list={list}
+        onDismiss={() => setVisible(false)}
+        visible={visible}
+        showDropDown={() => setVisible(true)}
         value={field.value}
-        onValueChange={(value, index) => {
-          const item = items[index];
-          props.onAfterChange?.(item);
-          field.onChange(value);
-        }}
-        disabled={_disabled}
+        setValue={(value) => field.onChange(value)}
       />
-      {!!fieldState.error?.message && (
-        <Text
-          style={{
-            color: colorConstant.redDefault,
-            fontSize: 11,
-            fontWeight: "200",
-            marginLeft: 16,
-          }}
-        >
-          {fieldState.error?.message}
-        </Text>
-      )}
-    </>
+      <HelperText type="error" visible={!!fieldState.error?.message}>
+        {fieldState.error?.message}
+      </HelperText>
+    </View>
   );
 }

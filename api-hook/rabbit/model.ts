@@ -26,4 +26,6 @@ export type RabbitModel = {
 
   //user table
   user: UserModel;
+
+  key: string;
 };

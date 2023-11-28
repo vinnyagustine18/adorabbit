@@ -4,18 +4,18 @@ import Select, {
   ListType,
 } from "../../../components/element/select-input";
 
-import { useGetTypes } from "../../../api-hook/type/query";
+import { useGetRabbits } from "../../../api-hook/rabbit/query";
 
 export interface Props extends CustomSelectInputProps {}
 
-export default function TypeSelectInput(props: Props) {
-  const { disabled, label = "Type", ...rest } = props;
-  const query = useGetTypes();
+export default function RabbitSelectInput(props: Props) {
+  const { disabled, ...rest } = props;
+  const query = useGetRabbits();
   const data = query.data ?? [];
 
   const list: ListType[] = data.map((item) => {
     return {
-      label: `${item.name} - ${item.id}`,
+      label: `${item.name} - ${item.type.name} - ${item.gender}`,
       value: item.id,
       extra: item,
     };
@@ -23,5 +23,5 @@ export default function TypeSelectInput(props: Props) {
 
   const _disabled = disabled || query.isFetching;
 
-  return <Select {...rest} list={list} disabled={_disabled} label={label} />;
+  return <Select list={list} disabled={_disabled} {...rest} />;
 }

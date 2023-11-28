@@ -18,4 +18,6 @@ export type UserModel = {
   password: string;
   phoneNumber: string;
   type: UserTypeEnum;
+
+  key: string;
 };

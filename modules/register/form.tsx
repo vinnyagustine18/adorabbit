@@ -4,7 +4,7 @@ import { RegisterFormSchema, RegisterFormType } from "./form-type";
 import useYupValidationResolver from "../../hooks/use-yup-validation-resolver";
 import { useForm } from "react-hook-form";
 import { Text, View } from "../../components/themed";
-import { Button, WhiteSpace } from "@ant-design/react-native";
+
 import { router } from "expo-router";
 import TextInput from "../../components/element/text-input";
 import Container from "../../components/container";
@@ -17,6 +17,8 @@ import { ScrollView } from "react-native";
 import useGetCurrentLocation from "../../hooks/use-get-current-location";
 import firestore from "@react-native-firebase/firestore";
 import useGetAuthAction from "../../hooks/use-get-auth-action";
+import { Button } from "react-native-paper";
+import colorConstant from "../../constants/color.constant";
 
 enum RegisterStepEnum {
   email = "email",
@@ -103,58 +105,47 @@ export default function RegisterForm() {
         return (
           <>
             <TextInput name="name" label="Full Name" placeholder="fill name" />
-            <WhiteSpace size="xl" />
             <TextInput
-              type="phone-pad"
+              keyboardType="phone-pad"
               name="phoneNumber"
               label="Phone Number"
               placeholder="fill phone number"
             />
-            <WhiteSpace size="xl" />
             <TextInput
               name="email"
-              type="email-address"
               placeholder="fill the email"
               label="Email"
             />
-            <WhiteSpace size="xl" />
             <TextInput
               name="address"
-              type="text"
               placeholder="fill the address"
               label="Address"
             />
-            <WhiteSpace size="xl" />
             <TextInput
               name="latitude"
-              type="number"
               placeholder="fill the latitude"
               label="Latitude"
             />
-            <WhiteSpace size="xl" />
             <TextInput
               name="longitude"
-              type="number"
               placeholder="fill the longitude"
               label="Longitude"
             />
-            <WhiteSpace size="xl" />
             <TextInput
               name="password"
               type="password"
               placeholder="fill the password"
               label="Password "
             />
-            <WhiteSpace size="xl" />
             <TextInput
               name="passwordConfirmation"
               placeholder="fill the password confirmation"
               label="Password Confirmation"
               type="password"
             />
-            <WhiteSpace size="xl" />
             <RadioInput
               name="type"
+              label="Type"
               options={[
                 {
                   label: "User",
@@ -166,7 +157,6 @@ export default function RegisterForm() {
                 },
               ]}
             />
-            <WhiteSpace size="xl" />
           </>
         );
       // return (
@@ -196,11 +186,9 @@ export default function RegisterForm() {
       }}
     >
       <Form methods={methods}>
-        <WhiteSpace size="xl" />
         <Text style={{ textAlign: "center", fontSize: 24, fontWeight: "600" }}>
           {title}
         </Text>
-        <WhiteSpace size="xl" />
         {step === RegisterStepEnum.email ? (
           <ScrollView
             style={{
@@ -228,7 +216,8 @@ export default function RegisterForm() {
             <Button
               style={{ flex: 1, marginHorizontal: 16 }}
               onPress={onClickBack}
-              type="warning"
+              buttonColor={colorConstant.redDefault}
+              textColor={colorConstant.white}
             >
               {back}
             </Button>
@@ -241,7 +230,6 @@ export default function RegisterForm() {
               !isEmpty(methods.formState.errors) ||
               methods.formState.isSubmitting
             }
-            type="primary"
           >
             {next}
           </Button>

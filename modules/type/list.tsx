@@ -8,9 +8,11 @@ import {
 import { useGetTypes } from "../../api-hook/type/query";
 import FetchWrapperComponent from "../../components/common/fetch-wrapper-component";
 import Container from "../../components/container";
-import { List } from "@ant-design/react-native";
+import { AnimatedFAB, Divider, List } from "react-native-paper";
 import { router } from "expo-router";
-import FloatingActionButton from "../../components/floating-action-button";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import colorConstant from "../../constants/color.constant";
+import { View } from "../../components/themed";
 
 export default function TypeList() {
   const query = useGetTypes();
@@ -18,8 +20,20 @@ export default function TypeList() {
 
   return (
     <Container>
-      <FloatingActionButton onPress={() => router.push("/type/create")} />
-
+      <AnimatedFAB
+        icon={() => (
+          <FontAwesome name="plus" size={20} color={colorConstant.gray1} />
+        )}
+        onPress={() => router.push("/type/create")}
+        extended={false}
+        label="Create Type"
+        style={{
+          position: "absolute",
+          bottom: 16,
+          right: 16,
+          zIndex: 3,
+        }}
+      />
       <ScrollView>
         <FetchWrapperComponent
           empty={data.length === 0}
@@ -27,16 +41,19 @@ export default function TypeList() {
           error={query.error?.message}
           isLoading={query.isFetching}
           component={
-            <List renderHeader="Type List">
+            <List.Section>
+              <List.Subheader>Type List</List.Subheader>
               {data.map((item) => (
-                <List.Item
-                  key={item.id}
-                  onPress={() => router.push(`/type/${item.id}`)}
-                >
-                  {[item.name, item.id].join(" - ")}
-                </List.Item>
+                <View key={item.id}>
+                  <List.Item
+                    key={item.id}
+                    onPress={() => router.push(`/type/${item.id}`)}
+                    title={[item.name, item.id].join(" - ")}
+                  />
+                  <Divider />
+                </View>
               ))}
-            </List>
+            </List.Section>
           }
         />
       </ScrollView>

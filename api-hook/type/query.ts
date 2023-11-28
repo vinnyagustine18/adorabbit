@@ -21,7 +21,7 @@ export function useGetTypes(options?: UseQueryOptions<TypeModel[]>) {
       result.forEach((result) => {
         const user = result.data() as TypeModel;
 
-        users.push({ ...user, id: result.id });
+        users.push({ ...user, key: result.id });
       });
 
       return users;
@@ -35,7 +35,7 @@ export function useGetType(id: string, options?: UseQueryOptions<TypeModel>) {
     queryKey: options?.queryKey ?? typeKey.detail(id),
     queryFn: async () => {
       const result = await firestore().collection(collection).doc(id).get();
-      return { ...(result.data() as TypeModel), id: result.id };
+      return { ...(result.data() as TypeModel), key: result.id };
     },
     ...options,
   });

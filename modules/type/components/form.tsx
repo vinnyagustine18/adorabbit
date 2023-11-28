@@ -6,7 +6,6 @@ import { useForm } from "react-hook-form";
 import Form, { FormState } from "../../../components/form/form";
 import Container from "../../../components/container";
 import TextInput from "../../../components/element/text-input";
-import { Button, Flex, List, WhiteSpace } from "@ant-design/react-native";
 import Toast from "../../../components/toast";
 import { Text, View } from "../../../components/themed";
 import FormFooter from "../../../components/form/form-footer";
@@ -49,9 +48,13 @@ export default function TypeForm(props: Props) {
           editLabel="Edit Type"
           defaultLabel="Create Type"
         />
-        <WhiteSpace size="xl" />
-        <TextInput name="name" placeholder="Fill the name" label="Name" />
-        <WhiteSpace size="xl" />
+        <View
+          style={{
+            marginHorizontal: 16,
+          }}
+        >
+          <TextInput name="name" placeholder="Fill the name" label="Name" />
+        </View>
         <FormFooter onSubmit={onSubmit} data={type} />
       </Form>
     </Container>

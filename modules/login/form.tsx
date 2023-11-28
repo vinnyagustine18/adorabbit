@@ -6,7 +6,7 @@ import Form from "../../components/form/form";
 
 import auth from "@react-native-firebase/auth";
 
-import { Button, WhiteSpace } from "@ant-design/react-native";
+import { Button } from "react-native-paper";
 import TextInput from "../../components/element/text-input";
 
 import { Text, View } from "../../components/themed";
@@ -51,35 +51,31 @@ export default function LoginForm(props: Props) {
           >
             Adorabbit
           </Text>
-          <WhiteSpace size="xl" />
           <Text
             style={{ textAlign: "center", fontSize: 24, fontWeight: "600" }}
           >
             Login
           </Text>
-          <WhiteSpace size="xl" />
+
           <View
             style={{
               paddingHorizontal: 16,
             }}
           >
-            <TextInput clear name="email" type="email-address" label="Email" />
-            <WhiteSpace size="xl" />
-            <TextInput clear name="password" type="password" label="Password" />
-            <WhiteSpace size="xl" />
+            <TextInput name="email" label="Email" />
+
+            <TextInput name="password" type="password" label="Password" />
+
             <Button
               onPress={methods.handleSubmit(onSubmit as any)}
               loading={methods.formState.isSubmitting}
-              type="primary"
             >
               Login
             </Button>
-            <WhiteSpace size="lg" />
             <Link href="/register" asChild>
-              <Button type="ghost">Register</Button>
+              <Button>Register</Button>
             </Link>
           </View>
-          <WhiteSpace size="xl" />
         </Form>
       </ScrollView>
     </Container>

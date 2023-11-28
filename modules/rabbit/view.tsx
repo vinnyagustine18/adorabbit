@@ -2,7 +2,7 @@ import { router, useLocalSearchParams } from "expo-router";
 import { useGetType } from "../../api-hook/type/query";
 import TypeForm from "./components/form";
 import FetchWrapperComponent from "../../components/common/fetch-wrapper-component";
-import { ActivityIndicator } from "@ant-design/react-native";
+import { ActivityIndicator, Text } from "react-native-paper";
 import React from "react";
 
 import firestore from "@react-native-firebase/firestore";
@@ -18,7 +18,7 @@ export default function RabbitShow() {
   const params = useLocalSearchParams();
   const { id } = params as any;
 
-  const { user } = useGetAuthAction();
+  const { user, isLoading } = useGetAuthAction();
   const userId = user?.uid;
 
   const query = useGetRabbit(id);
@@ -38,7 +38,7 @@ export default function RabbitShow() {
 
       return result;
     },
-    []
+    [userId]
   );
 
   return (
@@ -46,7 +46,7 @@ export default function RabbitShow() {
       <FetchWrapperComponent
         onRetry={query.refetch}
         error={query.error?.message}
-        isLoading={query.isFetching}
+        isLoading={query.isFetching || isLoading}
         loadingComponent={<ActivityIndicator />}
         component={<RabbitForm rabbit={rabbit} onSubmit={onSubmit} />}
       />

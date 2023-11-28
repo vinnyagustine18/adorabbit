@@ -7,27 +7,37 @@ import { router } from "expo-router";
 import Container from "../../components/container";
 import useGetAuthAction from "../../hooks/use-get-auth-action";
 
-import shortId from "short-uuid";
+import { nanoid } from "nanoid";
+import { View } from "../../components/themed";
+import { Text } from "react-native-paper";
+import { UserModel } from "../../api-hook/user/model";
 
 export default function TypeCreate() {
-  const { user } = useGetAuthAction();
+  const { user, isLoading } = useGetAuthAction();
   const userId = user?.uid;
 
   const onSubmit = React.useCallback(
     async (values: TypeFormType, form: TypeFormMethod) => {
-      console.log(values, userId);
+      const { password, ...user } = (
+        await firestore().doc(`users/${userId}`).get()
+      ).data() as UserModel;
+
+      const id = nanoid();
+
       const result = await firestore()
-        .collection("types")
-        .add({ ...values });
+        .doc(`types/${id}`)
+        .set({ ...values, user, id });
+
       Toast.success("Data Berhasil Disimpan");
       router.back();
       return result;
     },
-    []
+    [userId]
   );
+
   return (
     <Container>
-      <TypeForm onSubmit={onSubmit} />
+      {isLoading ? <Text>Loading ...</Text> : <TypeForm onSubmit={onSubmit} />}
     </Container>
   );
 }

@@ -1,10 +1,12 @@
 import { ScrollView } from "react-native";
 import { useGetRabbits } from "../../api-hook/rabbit/query";
 import Container from "../../components/container";
-import FloatingActionButton from "../../components/floating-action-button";
 import FetchWrapperComponent from "../../components/common/fetch-wrapper-component";
-import { List } from "@ant-design/react-native";
+import { AnimatedFAB, Divider, List } from "react-native-paper";
 import { router } from "expo-router";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { View } from "../../components/themed";
+import { capitalize } from "lodash";
 
 export default function RabbitList() {
   const query = useGetRabbits();
@@ -12,7 +14,18 @@ export default function RabbitList() {
 
   return (
     <Container>
-      <FloatingActionButton onPress={() => router.push("/rabbit/create")} />
+      <AnimatedFAB
+        icon={() => <FontAwesome name="plus" size={24} />}
+        onPress={() => router.push("/rabbit/create")}
+        extended={false}
+        label="Create Rabbit"
+        style={{
+          position: "absolute",
+          bottom: 16,
+          right: 16,
+          zIndex: 3,
+        }}
+      />
       <ScrollView>
         <FetchWrapperComponent
           empty={data.length === 0}
@@ -20,16 +33,24 @@ export default function RabbitList() {
           error={query.error?.message}
           isLoading={query.isFetching}
           component={
-            <List renderHeader="Rabbit List">
+            <List.Section>
+              <List.Subheader>Rabbit List</List.Subheader>
+
               {data.map((item) => (
-                <List.Item
-                  key={item.id}
-                  onPress={() => router.push(`/rabbit/${item.id}`)}
-                >
-                  {[item.type.name, item.name, item.id].join(" - ")}
-                </List.Item>
+                <View key={item.id}>
+                  <List.Item
+                    title={[
+                      item.name,
+                      item.type.name,
+                      capitalize(item.gender),
+                    ].join(" - ")}
+                    key={item.id}
+                    onPress={() => router.push(`/rabbit/${item.id}`)}
+                  />
+                  <Divider />
+                </View>
               ))}
-            </List>
+            </List.Section>
           }
         />
       </ScrollView>

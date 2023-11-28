@@ -16,14 +16,18 @@ export function useGetRabbits(options?: UseQueryOptions<RabbitModel[]>) {
     queryKey: options?.queryKey ?? rabbitKey.list(),
     queryFn: async () => {
       const result = await firestore().collection(collection).get();
-      const users: RabbitModel[] = [];
+      const rabbits: RabbitModel[] = [];
 
       result.forEach((result) => {
-        const user = result.data() as RabbitModel;
-        users.push({ ...user, id: result.id });
+        const rabbit = result.data() as RabbitModel;
+        rabbits.push({
+          ...rabbit,
+          birthAt: result.data().birthAt.toDate(),
+          key: result.id,
+        });
       });
 
-      return users;
+      return rabbits;
     },
     ...options,
   });
@@ -36,8 +40,13 @@ export function useGetRabbit(
   return useQuery({
     queryKey: options?.queryKey ?? rabbitKey.detail(id),
     queryFn: async () => {
-      const result = await firestore().collection(collection).doc(id).get();
-      return { ...(result.data() as RabbitModel), id: result.id };
+      const result = await firestore().doc(`${collection}/${id}`).get();
+      const rabbit = result.data();
+      return {
+        ...(rabbit as RabbitModel),
+        birthAt: rabbit?.birthAt?.toDate() ?? new Date(),
+        key: result.id,
+      };
     },
     ...options,
   });

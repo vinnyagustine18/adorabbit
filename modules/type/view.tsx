@@ -2,19 +2,20 @@ import { router, useLocalSearchParams } from "expo-router";
 import { useGetType } from "../../api-hook/type/query";
 import TypeForm from "./components/form";
 import FetchWrapperComponent from "../../components/common/fetch-wrapper-component";
-import { ActivityIndicator } from "@ant-design/react-native";
+import { ActivityIndicator, Text } from "react-native-paper";
 import React from "react";
 import { TypeFormMethod, TypeFormType } from "./components/form-type";
 import firestore from "@react-native-firebase/firestore";
 import Toast from "../../components/toast";
 import Container from "../../components/container";
 import useGetAuthAction from "../../hooks/use-get-auth-action";
+import { View } from "../../components/themed";
 
 export default function TypeShow() {
   const params = useLocalSearchParams();
   const { id } = params as any;
 
-  const { user } = useGetAuthAction();
+  const { user, isLoading } = useGetAuthAction();
   const userId = user?.uid;
 
   const query = useGetType(id);
@@ -35,7 +36,7 @@ export default function TypeShow() {
 
       return result;
     },
-    []
+    [userId]
   );
 
   return (
@@ -43,7 +44,7 @@ export default function TypeShow() {
       <FetchWrapperComponent
         onRetry={query.refetch}
         error={query.error?.message}
-        isLoading={query.isFetching}
+        isLoading={query.isFetching || isLoading}
         loadingComponent={<ActivityIndicator />}
         component={<TypeForm type={type} onSubmit={onSubmit} />}
       />

@@ -20,7 +20,7 @@ export function useGetUsers(options?: UseQueryOptions<UserModel[]>) {
 
       result.forEach((result) => {
         const user = result.data() as UserModel;
-        users.push({ ...user, id: result.id });
+        users.push({ ...user, key: result.id });
       });
 
       return users;
@@ -34,7 +34,7 @@ export function useGetUser(id: string, options?: UseQueryOptions<UserModel>) {
     queryKey: options?.queryKey ?? userKey.list(),
     queryFn: async () => {
       const result = await firestore().collection(collection).doc(id).get();
-      return { ...(result.data() as UserModel), id: result.id };
+      return { ...(result.data() as UserModel), key: result.id };
     },
     ...options,
   });

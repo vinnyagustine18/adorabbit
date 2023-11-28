@@ -9,28 +9,34 @@ import useGetAuthAction from "../../hooks/use-get-auth-action";
 import { RabbitFormMethod, RabbitFormType } from "./components/form-type";
 import { getSubmitData } from "./utils";
 import RabbitForm from "./components/form";
-import shortId from "short-uuid";
+import { nanoid } from "nanoid";
+import { Text } from "react-native-paper";
 
 export default function RabbitCreate() {
-  const { user } = useGetAuthAction();
+  const { user, isLoading } = useGetAuthAction();
   const userId = user?.uid;
   const onSubmit = React.useCallback(
     async (values: RabbitFormType, form: RabbitFormMethod) => {
       const rabbit = await getSubmitData(values, userId!);
-
+      const id = nanoid(10);
       const result = await firestore()
         .collection("rabbits")
-        .add({ ...rabbit, id: shortId.generate() });
+        .doc(id)
+        .set({ ...rabbit, id });
 
       Toast.success("Data Berhasil Disimpan");
       router.back();
       return result;
     },
-    []
+    [userId]
   );
   return (
     <Container>
-      <RabbitForm onSubmit={onSubmit} />
+      {isLoading ? (
+        <Text>Loading ...</Text>
+      ) : (
+        <RabbitForm onSubmit={onSubmit} />
+      )}
     </Container>
   );
 }

@@ -16,15 +16,14 @@ import { useForm } from "react-hook-form";
 import Toast from "../../../components/toast";
 import Form from "../../../components/form/form";
 import FormHeader from "../../../components/form/form-header";
-import { WhiteSpace } from "@ant-design/react-native";
 import FormFooter from "../../../components/form/form-footer";
 import { ScrollView } from "react-native";
 import DateInput from "../../../components/element/date-input";
 import TextInput from "../../../components/element/text-input";
 import colorConstant from "../../../constants/color.constant";
 import RadioInput from "../../../components/element/radio-input";
-import TextAreaInput from "../../../components/element/text-area-input";
 import TypeSelectInput from "../../type/components/type-select-input";
+import { View } from "../../../components/themed";
 
 interface Props {
   rabbit?: RabbitModel;
@@ -72,83 +71,79 @@ export default function RabbitForm(props: Props) {
             defaultLabel="Create Rabbit"
             editLabel="Edit Rabbit"
           />
-          <WhiteSpace size="xl" />
-          <TextInput name="name" label="Name" />
-          <WhiteSpace size="xl" />
-          <TypeSelectInput
-            name="typeId"
-            label="Type"
-            placeholder="Fill the type"
-          />
-          <DateInput
-            name="birthAt"
-            placeholder="Birth Date"
+          <View
             style={{
-              backgroundColor: colorConstant.black,
+              marginTop: 16,
+              marginHorizontal: 16,
             }}
-          />
-          <WhiteSpace size="xl" />
-          <TextAreaInput
-            name="description"
-            label="Description"
-            placeholder="Fill the description"
-          />
-          <WhiteSpace size="xl" />
-          <RadioInput
-            name="gender"
-            label="Gender"
-            options={[
-              {
-                label: "Male",
-                value: GenderEnum.male,
-              },
-              {
-                label: "Female",
-                value: GenderEnum.female,
-              },
-            ]}
-          />
-          <WhiteSpace size="xl" />
-          <RadioInput
-            name="status"
-            label="Status"
-            options={[
-              {
-                label: "Alive",
-                value: RabbitStatusEnum.alive,
-              },
-              {
-                label: "Deceased",
-                value: RabbitStatusEnum.deceased,
-              },
-            ]}
-          />
-          <WhiteSpace size="xl" />
-          <RadioInput
-            name="ownershipStatus"
-            label="Ownership"
-            options={[
-              {
-                label: "Collection",
-                value: RabbitOwnershipEnum.collection,
-              },
-              {
-                label: "Commercial",
-                value: RabbitOwnershipEnum.commercial,
-              },
-            ]}
-          />
-          <WhiteSpace size="xl" />
-          <TextInput
-            type="number"
-            name="price"
-            label="Price"
-            placeholder="Fill the price"
-          />
-          <WhiteSpace size="xl" />
-          <WhiteSpace size="xl" />
-          <WhiteSpace size="xl" />
-          <WhiteSpace size="xl" />
+          >
+            <TextInput name="name" label="Name" />
+
+            <TypeSelectInput
+              name="typeId"
+              label="Type"
+              placeholder="Fill the type"
+            />
+            <DateInput name="birthAt" placeholder="Birth Date" />
+
+            <TextInput
+              keyboardType="number-pad"
+              name="price"
+              label="Price"
+              placeholder="Fill the price"
+            />
+
+            <TextInput
+              name="description"
+              label="Description"
+              placeholder="Fill the description"
+            />
+
+            <RadioInput
+              name="gender"
+              label="Gender"
+              options={[
+                {
+                  label: "Male",
+                  value: GenderEnum.male,
+                },
+                {
+                  label: "Female",
+                  value: GenderEnum.female,
+                },
+              ]}
+            />
+
+            <RadioInput
+              name="status"
+              label="Status"
+              options={[
+                {
+                  label: "Alive",
+                  value: RabbitStatusEnum.alive,
+                },
+                {
+                  label: "Deceased",
+                  value: RabbitStatusEnum.deceased,
+                },
+              ]}
+            />
+
+            <RadioInput
+              name="ownershipStatus"
+              label="Ownership"
+              options={[
+                {
+                  label: "Collection",
+                  value: RabbitOwnershipEnum.collection,
+                },
+                {
+                  label: "Commercial",
+                  value: RabbitOwnershipEnum.commercial,
+                },
+              ]}
+            />
+          </View>
         </ScrollView>
         <FormFooter onSubmit={onSubmit} data={rabbit} />
       </Container>

@@ -1,19 +1,30 @@
-import InputItem, {
-  InputItemProps,
-} from "@ant-design/react-native/lib/input-item";
 import { useController, useFormContext } from "react-hook-form";
 import { useFormState } from "../form/form";
 
 import colorConstant from "../../constants/color.constant";
-import { Text } from "../themed";
+import { Text, View } from "../themed";
+import {
+  TextInput as TextField,
+  TextInputProps as TextFieldProps,
+} from "react-native-paper";
+import { HelperText } from "react-native-paper";
+import React from "react";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 
-export interface TextInputProps extends InputItemProps {
+export interface TextInputProps extends TextFieldProps {
   name: string;
-  label?: React.ReactNode | string;
+  type?: "default" | "password";
 }
 
 export default function TextInput(props: TextInputProps) {
-  const { name, disabled, label, ...rest } = props;
+  const {
+    name,
+    disabled,
+    type = "default",
+    secureTextEntry = props.type === "password",
+    ...rest
+  } = props;
+  const [isPassword, setIsPassword] = React.useState(secureTextEntry);
   const { control, setValue } = useFormContext();
   const { field, fieldState } = useController({
     name,
@@ -23,44 +34,36 @@ export default function TextInput(props: TextInputProps) {
   const _disabled = !editable || disabled;
 
   return (
-    <>
-      {!!label && typeof label === "string" ? (
-        <Text
-          style={{
-            marginLeft: 16,
-            fontSize: 14,
-            marginBottom: 8,
-            fontWeight: "600",
-          }}
-        >
-          {label}
-        </Text>
-      ) : (
-        label
-      )}
-
-      <InputItem
-        {...field}
-        value={field.value.toString()}
-        onChange={(value) =>
-          setValue(name, value, { shouldValidate: true, shouldTouch: true })
-        }
+    <View>
+      <TextField
         {...rest}
+        secureTextEntry={isPassword}
+        right={
+          type === "password" && (
+            <TextField.Icon
+              icon={() => (
+                <FontAwesome
+                  name={isPassword ? "eye" : "eye-slash"}
+                  size={20}
+                />
+              )}
+              onPress={() => setIsPassword((prev) => !prev)}
+            />
+          )
+        }
+        value={
+          typeof field.value === "string"
+            ? field.value
+            : field.value?.toString()
+        }
+        onChangeText={(value) => {
+          field.onChange(value);
+        }}
         disabled={_disabled}
-        error={!!fieldState.error?.message}
       />
-      {!!fieldState.error?.message && (
-        <Text
-          style={{
-            color: colorConstant.redDefault,
-            fontSize: 11,
-            fontWeight: "200",
-            marginLeft: 16,
-          }}
-        >
-          {fieldState.error?.message}
-        </Text>
-      )}
-    </>
+      <HelperText type="error" visible={!!fieldState.error?.message}>
+        {fieldState.error?.message}
+      </HelperText>
+    </View>
   );
 }
