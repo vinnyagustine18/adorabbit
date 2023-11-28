@@ -1,18 +1,12 @@
-import {
-  FlatList,
-  Pressable,
-  ScrollView,
-  TouchableHighlight,
-  useColorScheme,
-} from "react-native";
-import { useGetTypes } from "../../api-hook/type/query";
-import FetchWrapperComponent from "../../components/common/fetch-wrapper-component";
-import Container from "../../components/container";
-import { AnimatedFAB, Divider, List } from "react-native-paper";
-import { router } from "expo-router";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import colorConstant from "../../constants/color.constant";
-import { View } from "../../components/themed";
+import { ScrollView } from 'react-native';
+import { useGetTypes } from '../../api-hook/type/query';
+import FetchWrapperComponent from '../../components/common/fetch-wrapper-component';
+import Container from '../../components/container';
+import { AnimatedFAB, Divider, List } from 'react-native-paper';
+import { router } from 'expo-router';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import colorConstant from '../../constants/color.constant';
+import { View } from '../../components/themed';
 
 export default function TypeList() {
   const query = useGetTypes();
@@ -24,11 +18,11 @@ export default function TypeList() {
         icon={() => (
           <FontAwesome name="plus" size={20} color={colorConstant.gray1} />
         )}
-        onPress={() => router.push("/type/create")}
+        onPress={() => router.push('/type/create')}
         extended={false}
         label="Create Type"
         style={{
-          position: "absolute",
+          position: 'absolute',
           bottom: 16,
           right: 16,
           zIndex: 3,
@@ -48,7 +42,7 @@ export default function TypeList() {
                   <List.Item
                     key={item.id}
                     onPress={() => router.push(`/type/${item.id}`)}
-                    title={[item.name, item.id].join(" - ")}
+                    title={[item.name, item.id].join(' - ')}
                   />
                   <Divider />
                 </View>

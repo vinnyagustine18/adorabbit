@@ -1,6 +1,5 @@
 import { useController, useFormContext } from "react-hook-form";
-import { Text, View } from "../themed";
-import colorConstant from "../../constants/color.constant";
+import { View } from "../themed";
 
 import { useFormState } from "../form/form";
 import { DatePickerInput } from "react-native-paper-dates";
@@ -46,6 +45,7 @@ export default function DateInput(props: Props) {
         value={field.value}
         onChange={(value) => field.onChange(value)}
         disabled={_disabled}
+        placeholder={placeholder}
       />
       <HelperText type="error" visible={!!fieldState.error?.message}>
         {fieldState.error?.message}

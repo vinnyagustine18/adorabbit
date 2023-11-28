@@ -1,11 +1,11 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet } from 'react-native';
 
-import MapView, { Marker } from "react-native-maps";
-import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-import React from "react";
-import { add, debounce } from "lodash";
-import useGetCurrentLocation from "../hooks/use-get-current-location";
-import { View } from "./themed";
+import MapView, { Marker } from 'react-native-maps';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import React from 'react';
+import { debounce } from 'lodash';
+import useGetCurrentLocation from '../hooks/use-get-current-location';
+import { View } from './themed';
 
 interface Props {
   onChange?: (values: {
@@ -33,7 +33,7 @@ export default function AddressComponent(props: Props) {
     longitudeDelta: 0.005,
   });
   const [isBuffer, setIsBuffer] = React.useState(false);
-  const [address, setAddress] = React.useState(props.value?.address ?? "");
+  const [address, setAddress] = React.useState(props.value?.address ?? '');
 
   const onGenerateAddress = React.useCallback(
     async ({
@@ -45,7 +45,7 @@ export default function AddressComponent(props: Props) {
     }) => {
       try {
         const request = await fetch(
-          `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude}%2C${longitude}&location_type=ROOFTOP%7CRANGE_INTERPOLATED%7CGEOMETRIC_CENTER&key=${"AIzaSyCEjmASHmwsueyVcBTftVvErllIA2sllNg"}`
+          `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude}%2C${longitude}&location_type=ROOFTOP%7CRANGE_INTERPOLATED%7CGEOMETRIC_CENTER&key=${'AIzaSyCEjmASHmwsueyVcBTftVvErllIA2sllNg'}`,
         );
 
         const response = await request.json();
@@ -56,7 +56,7 @@ export default function AddressComponent(props: Props) {
         console.log(e);
       }
     },
-    [setAddress]
+    [setAddress],
   );
 
   React.useEffect(() => {
@@ -64,7 +64,7 @@ export default function AddressComponent(props: Props) {
       ...region,
       address,
     });
-  }, [region, address]);
+  }, [region, address, props]);
 
   return (
     <View style={styles.container}>
@@ -97,8 +97,8 @@ export default function AddressComponent(props: Props) {
       </MapView>
       <View
         style={{
-          backgroundColor: "rgba(0,0,0,0)",
-          position: "absolute",
+          backgroundColor: 'rgba(0,0,0,0)',
+          position: 'absolute',
           top: 16,
           left: 5,
           right: 5,
@@ -106,9 +106,9 @@ export default function AddressComponent(props: Props) {
       >
         <GooglePlacesAutocomplete
           currentLocationLabel={address}
-          placeholder={"Search"}
+          placeholder={'Search'}
           fetchDetails={true}
-          GooglePlacesDetailsQuery={{ fields: "geometry" }}
+          GooglePlacesDetailsQuery={{ fields: 'geometry' }}
           onPress={(data, details = null) => {
             const { lat, lng } = details!.geometry.location;
             setRegion((prev) => ({ ...prev, latitude: lat, longitude: lng }));
@@ -118,13 +118,13 @@ export default function AddressComponent(props: Props) {
             debounce(() => setIsBuffer(false), 200)();
           }}
           query={{
-            key: "AIzaSyCEjmASHmwsueyVcBTftVvErllIA2sllNg",
-            language: "id",
+            key: 'AIzaSyCEjmASHmwsueyVcBTftVvErllIA2sllNg',
+            language: 'id',
           }}
           styles={{
             textInputContainer: {
-              width: "100%",
-              backgroundColor: "rgba(0,0,0,0)",
+              width: '100%',
+              backgroundColor: 'rgba(0,0,0,0)',
               borderTopWidth: 0,
               borderBottomWidth: 0,
             },
@@ -132,17 +132,17 @@ export default function AddressComponent(props: Props) {
               marginLeft: 0,
               marginRight: 0,
               height: 38,
-              color: "#5d5d5d",
+              color: '#5d5d5d',
               fontSize: 16,
             },
             description: {
-              fontWeight: "bold",
+              fontWeight: 'bold',
             },
             predefinedPlacesDescription: {
-              color: "#1faadb",
+              color: '#1faadb',
             },
             listView: {
-              backgroundColor: "rgba(255,255,255,1)",
+              backgroundColor: 'rgba(255,255,255,1)',
             },
           }}
         />
@@ -154,11 +154,11 @@ export default function AddressComponent(props: Props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "flex-start",
+    alignItems: 'center',
+    justifyContent: 'flex-start',
   },
   map: {
-    width: "100%",
+    width: '100%',
     flex: 1,
   },
 });

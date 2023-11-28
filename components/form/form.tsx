@@ -1,17 +1,13 @@
-import {
-  FormProvider,
-  FormProviderProps,
-  SubmitHandler,
-} from "react-hook-form";
-import invariant from "invariant";
-import * as React from "react";
+import { FormProvider, FormProviderProps } from 'react-hook-form';
+import invariant from 'invariant';
+import * as React from 'react';
 
 export interface FormStateProps {
   editable: boolean;
   setIsEditable: React.Dispatch<React.SetStateAction<boolean>>;
 }
 interface FormProps {
-  methods: Omit<FormProviderProps<any>, "children">;
+  methods: Omit<FormProviderProps<any>, 'children'>;
   children: React.ReactNode;
   style?: any;
   defaultEditable?: boolean;
@@ -24,7 +20,7 @@ export const FormContext = React.createContext<FormStateProps>({
 
 export default function Form(props: FormProps) {
   const [isEditable, setIsEditable] = React.useState(
-    props.defaultEditable !== undefined ? props.defaultEditable : true
+    props.defaultEditable !== undefined ? props.defaultEditable : true,
   );
   const { methods, children } = props;
 
@@ -33,7 +29,7 @@ export default function Form(props: FormProps) {
       editable: isEditable && !methods.formState.isSubmitting,
       setIsEditable,
     }),
-    [isEditable, methods.formState.isSubmitting]
+    [isEditable, methods.formState.isSubmitting],
   );
 
   return (
@@ -56,7 +52,7 @@ export function useFormState(): FormStateProps {
   const context = React.useContext(FormContext);
   invariant(
     context !== undefined,
-    "useFormState must be used inside Form Container"
+    'useFormState must be used inside Form Container',
   );
   return context;
 }

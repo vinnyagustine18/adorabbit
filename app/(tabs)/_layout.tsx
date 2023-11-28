@@ -1,14 +1,13 @@
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { Tabs } from "expo-router";
-import { useColorScheme } from "react-native";
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { Tabs } from 'expo-router';
+import { useColorScheme } from 'react-native';
 
-import Colors from "../../constants/Colors";
-import useGetAuthAction from "../../hooks/use-get-auth-action";
+import Colors from '../../constants/Colors';
 /**
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
  */
 function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>["name"];
+  name: React.ComponentProps<typeof FontAwesome>['name'];
   color: string;
 }) {
   return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
@@ -20,20 +19,20 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
+        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
-          title: "Home",
+          title: 'Home',
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
         }}
       />
       <Tabs.Screen
         name="transaction"
         options={{
-          title: "Transaction",
+          title: 'Transaction',
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="file-text" color={color} />
           ),
@@ -42,7 +41,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="profile"
         options={{
-          title: "Profile",
+          title: 'Profile',
           headerShown: false,
           tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
         }}

@@ -1,9 +1,8 @@
-import * as React from "react";
-import { StyleSheet, View } from "react-native";
+import * as React from 'react';
+import { StyleSheet, View } from 'react-native';
 
-import { FastImageProps, ImageStyle } from "react-native-fast-image";
-import FastImage from "react-native-fast-image";
-import imageConstant from "../constants/image.constant";
+import { FastImageProps, ImageStyle } from 'react-native-fast-image';
+import FastImage from 'react-native-fast-image';
 
 interface Props extends FastImageProps {
   placeholderStyle?: ImageStyle;
@@ -11,7 +10,7 @@ interface Props extends FastImageProps {
 
 export default function ImageComponent(props: Props) {
   const [isLoaded, setIsLoaded] = React.useState(false);
-  const { onLoad, resizeMode = "contain", ...restProps } = props;
+  const { onLoad, resizeMode = 'contain', ...restProps } = props;
 
   return (
     <View>
@@ -20,7 +19,7 @@ export default function ImageComponent(props: Props) {
         resizeMode={resizeMode}
         onLoad={(e) => {
           onLoad && onLoad(e);
-          if (restProps.source && typeof restProps.source === "object") {
+          if (restProps.source && typeof restProps.source === 'object') {
             if ((restProps.source as any).uri) {
               setIsLoaded(true);
             }
@@ -32,7 +31,7 @@ export default function ImageComponent(props: Props) {
       {!isLoaded && (
         <FastImage
           resizeMode="contain"
-          source={require("./../assets/images/icon.png")}
+          source={require('./../assets/images/icon.png')}
           style={[styles.absolute, props.placeholderStyle]}
         />
       )}
@@ -42,7 +41,7 @@ export default function ImageComponent(props: Props) {
 
 const styles = StyleSheet.create({
   absolute: {
-    position: "absolute",
+    position: 'absolute',
     top: 0,
     bottom: 0,
     right: 0,

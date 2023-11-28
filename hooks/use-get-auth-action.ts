@@ -1,10 +1,10 @@
-import auth, { FirebaseAuthTypes } from "@react-native-firebase/auth";
-import firestore from "@react-native-firebase/firestore";
-import React from "react";
-import Toast from "../components/toast";
-import { RegisterFormType } from "../modules/register/form-type";
-import { LoginFormType } from "../modules/login/form-type";
-import { router } from "expo-router";
+import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+import React from 'react';
+import Toast from '../components/toast';
+import { RegisterFormType } from '../modules/register/form-type';
+import { LoginFormType } from '../modules/login/form-type';
+import { router } from 'expo-router';
 
 export default function useGetAuthAction() {
   const [initializing, setInitializing] = React.useState(true);
@@ -15,10 +15,10 @@ export default function useGetAuthAction() {
       setInitializing(true);
       await auth().signOut();
       setUser(null);
-      Toast.success("Sign out success");
-      router.replace("/profile");
+      Toast.success('Sign out success');
+      router.replace('/profile');
     } catch (e) {
-      Toast.error("Sign out failed");
+      Toast.error('Sign out failed');
     } finally {
       setInitializing(false);
     }
@@ -31,15 +31,15 @@ export default function useGetAuthAction() {
         setInitializing(true);
         const result = await auth().createUserWithEmailAndPassword(
           rest.email,
-          rest.password
+          rest.password,
         );
         const id = result.user.uid;
         await firestore()
-          .collection("users")
+          .collection('users')
           .doc(id)
           .set({ ...rest, id: result.user.uid });
-        Toast.success("Register Successful");
-        router.replace("/profile");
+        Toast.success('Register Successful');
+        router.replace('/profile');
       } catch (e) {
         console.log(e);
         Toast.error(JSON.stringify(e));
@@ -47,7 +47,7 @@ export default function useGetAuthAction() {
         setInitializing(false);
       }
     },
-    [setInitializing]
+    [setInitializing],
   );
 
   const onLogin = React.useCallback(async (values: LoginFormType) => {
@@ -55,11 +55,11 @@ export default function useGetAuthAction() {
       setInitializing(true);
       const result = await auth().signInWithEmailAndPassword(
         values.email,
-        values.password
+        values.password,
       );
       setUser(result.user);
-      Toast.success("Login Successful");
-      router.replace("/(tabs)/");
+      Toast.success('Login Successful');
+      router.replace('/(tabs)/');
     } catch (e) {
       console.log(e);
       Toast.error(JSON.stringify(e));
@@ -74,7 +74,7 @@ export default function useGetAuthAction() {
       if (initializing) setInitializing(false);
     });
     return subscriber; // unsubscribe on unmount
-  }, [initializing, setInitializing]);
+  }, [initializing]);
 
   return {
     isLoading: initializing,

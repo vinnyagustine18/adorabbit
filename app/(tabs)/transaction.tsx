@@ -11,7 +11,7 @@ export default function TransactionScreen() {
           textAlign: "center",
         }}
       >
-        {!!user ? "Transaction" : "you must login for access this pages"}
+        {user ? "Transaction" : "you must login for access this pages"}
       </Text>
     </Container>
   );

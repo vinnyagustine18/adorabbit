@@ -1,29 +1,28 @@
-import React from "react";
+import React from 'react';
 import {
   RabbitModel,
   RabbitOwnershipEnum,
   RabbitStatusEnum,
-} from "../../../api-hook/rabbit/model";
-import Container from "../../../components/container";
+} from '../../../api-hook/rabbit/model';
+import Container from '../../../components/container';
 import {
   RabbitFormMethod,
   RabbitFormSchema,
   RabbitFormType,
-} from "./form-type";
-import { GenderEnum } from "../../../api-hook/user/model";
-import useYupValidationResolver from "../../../hooks/use-yup-validation-resolver";
-import { useForm } from "react-hook-form";
-import Toast from "../../../components/toast";
-import Form from "../../../components/form/form";
-import FormHeader from "../../../components/form/form-header";
-import FormFooter from "../../../components/form/form-footer";
-import { ScrollView } from "react-native";
-import DateInput from "../../../components/element/date-input";
-import TextInput from "../../../components/element/text-input";
-import colorConstant from "../../../constants/color.constant";
-import RadioInput from "../../../components/element/radio-input";
-import TypeSelectInput from "../../type/components/type-select-input";
-import { View } from "../../../components/themed";
+} from './form-type';
+import { GenderEnum } from '../../../api-hook/user/model';
+import useYupValidationResolver from '../../../hooks/use-yup-validation-resolver';
+import { useForm } from 'react-hook-form';
+import Toast from '../../../components/toast';
+import Form from '../../../components/form/form';
+import FormHeader from '../../../components/form/form-header';
+import FormFooter from '../../../components/form/form-footer';
+import { ScrollView } from 'react-native';
+import DateInput from '../../../components/element/date-input';
+import TextInput from '../../../components/element/text-input';
+import RadioInput from '../../../components/element/radio-input';
+import TypeSelectInput from '../../type/components/type-select-input';
+import { View } from '../../../components/themed';
 
 interface Props {
   rabbit?: RabbitModel;
@@ -35,14 +34,14 @@ export default function RabbitForm(props: Props) {
   const defaultValues = React.useMemo<RabbitFormType>(() => {
     return {
       birthAt: rabbit?.birthAt ?? new Date(),
-      description: rabbit?.description ?? "",
+      description: rabbit?.description ?? '',
       gender: rabbit?.gender ?? GenderEnum.male,
-      name: rabbit?.name ?? "",
+      name: rabbit?.name ?? '',
       ownershipStatus:
         rabbit?.ownershipStatus ?? RabbitOwnershipEnum.collection,
       price: rabbit?.price ?? 0,
       status: rabbit?.status ?? RabbitStatusEnum.alive,
-      typeId: rabbit?.type?.id ?? "",
+      typeId: rabbit?.type?.id ?? '',
     };
   }, [rabbit]);
 
@@ -53,14 +52,17 @@ export default function RabbitForm(props: Props) {
     resolver,
   });
 
-  const onSubmit = React.useCallback(async (values: RabbitFormType) => {
-    try {
-      await props.onSubmit(values, methods);
-    } catch (e: any) {
-      Toast.error(e);
-      console.log(e);
-    }
-  }, []);
+  const onSubmit = React.useCallback(
+    async (values: RabbitFormType) => {
+      try {
+        await props.onSubmit(values, methods);
+      } catch (e: any) {
+        Toast.error(e);
+        console.log(e);
+      }
+    },
+    [methods, props],
+  );
 
   return (
     <Form methods={methods} defaultEditable={!rabbit}>
@@ -104,11 +106,11 @@ export default function RabbitForm(props: Props) {
               label="Gender"
               options={[
                 {
-                  label: "Male",
+                  label: 'Male',
                   value: GenderEnum.male,
                 },
                 {
-                  label: "Female",
+                  label: 'Female',
                   value: GenderEnum.female,
                 },
               ]}
@@ -119,11 +121,11 @@ export default function RabbitForm(props: Props) {
               label="Status"
               options={[
                 {
-                  label: "Alive",
+                  label: 'Alive',
                   value: RabbitStatusEnum.alive,
                 },
                 {
-                  label: "Deceased",
+                  label: 'Deceased',
                   value: RabbitStatusEnum.deceased,
                 },
               ]}
@@ -134,11 +136,11 @@ export default function RabbitForm(props: Props) {
               label="Ownership"
               options={[
                 {
-                  label: "Collection",
+                  label: 'Collection',
                   value: RabbitOwnershipEnum.collection,
                 },
                 {
-                  label: "Commercial",
+                  label: 'Commercial',
                   value: RabbitOwnershipEnum.commercial,
                 },
               ]}

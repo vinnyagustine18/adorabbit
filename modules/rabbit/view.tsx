@@ -1,18 +1,16 @@
-import { router, useLocalSearchParams } from "expo-router";
-import { useGetType } from "../../api-hook/type/query";
-import TypeForm from "./components/form";
-import FetchWrapperComponent from "../../components/common/fetch-wrapper-component";
-import { ActivityIndicator, Text } from "react-native-paper";
-import React from "react";
+import { router, useLocalSearchParams } from 'expo-router';
+import FetchWrapperComponent from '../../components/common/fetch-wrapper-component';
+import { ActivityIndicator } from 'react-native-paper';
+import React from 'react';
 
-import firestore from "@react-native-firebase/firestore";
-import Toast from "../../components/toast";
-import Container from "../../components/container";
-import useGetAuthAction from "../../hooks/use-get-auth-action";
-import { useGetRabbit } from "../../api-hook/rabbit/query";
-import { RabbitFormMethod, RabbitFormType } from "./components/form-type";
-import RabbitForm from "./components/form";
-import { getSubmitData } from "./utils";
+import firestore from '@react-native-firebase/firestore';
+import Toast from '../../components/toast';
+import Container from '../../components/container';
+import useGetAuthAction from '../../hooks/use-get-auth-action';
+import { useGetRabbit } from '../../api-hook/rabbit/query';
+import { RabbitFormMethod, RabbitFormType } from './components/form-type';
+import RabbitForm from './components/form';
+import { getSubmitData } from './utils';
 
 export default function RabbitShow() {
   const params = useLocalSearchParams();
@@ -29,16 +27,16 @@ export default function RabbitShow() {
       const rabbit = await getSubmitData(values, userId!);
 
       const result = await firestore()
-        .collection("rabbits")
+        .collection('rabbits')
         .doc(query.data?.id!)
         .update(rabbit);
 
-      Toast.success("Data Berhasil diubah");
+      Toast.success('Data Berhasil diubah');
       router.back();
 
       return result;
     },
-    [userId]
+    [query.data?.id, userId],
   );
 
   return (

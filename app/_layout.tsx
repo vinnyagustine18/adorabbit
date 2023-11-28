@@ -6,13 +6,14 @@ import {
 } from "@react-navigation/native";
 import * as Font from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
-import { useEffect, useState } from "react";
+
 import { useColorScheme } from "react-native";
 import Toast from "react-native-toast-message";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { PaperProvider, MD3LightTheme as Theme } from "react-native-paper";
 import "react-native-get-random-values";
 import { enGB, registerTranslation } from "react-native-paper-dates";
+import React from "react";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -41,11 +42,11 @@ export default function RootLayout() {
   });
 
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
-  useEffect(() => {
+  React.useEffect(() => {
     if (error) throw error;
   }, [error]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (loaded) {
       SplashScreen.hideAsync();
     }

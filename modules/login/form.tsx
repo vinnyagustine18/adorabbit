@@ -1,21 +1,17 @@
-import React from "react";
-import { LoginFormSchema, LoginFormType } from "./form-type";
-import useYupValidationResolver from "../../hooks/use-yup-validation-resolver";
-import { useForm } from "react-hook-form";
-import Form from "../../components/form/form";
+import React from 'react';
+import { LoginFormSchema, LoginFormType } from './form-type';
+import useYupValidationResolver from '../../hooks/use-yup-validation-resolver';
+import { useForm } from 'react-hook-form';
+import Form from '../../components/form/form';
 
-import auth from "@react-native-firebase/auth";
+import { Button } from 'react-native-paper';
+import TextInput from '../../components/element/text-input';
 
-import { Button } from "react-native-paper";
-import TextInput from "../../components/element/text-input";
-
-import { Text, View } from "../../components/themed";
-import Container from "../../components/container";
-import { Link, router } from "expo-router";
-import Toast from "../../components/toast";
-import useGetAuthAction from "../../hooks/use-get-auth-action";
-import Select from "../../components/element/select-input";
-import { ScrollView } from "react-native";
+import { Text, View } from '../../components/themed';
+import Container from '../../components/container';
+import { Link } from 'expo-router';
+import useGetAuthAction from '../../hooks/use-get-auth-action';
+import { ScrollView } from 'react-native';
 
 interface Props {}
 
@@ -23,8 +19,8 @@ export default function LoginForm(props: Props) {
   const { onLogin } = useGetAuthAction();
   const defaultValues = React.useMemo<LoginFormType>(() => {
     return {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
     };
   }, []);
   const resolver = useYupValidationResolver(LoginFormSchema());
@@ -34,25 +30,28 @@ export default function LoginForm(props: Props) {
     resolver,
   });
 
-  const onSubmit = React.useCallback(async (values: LoginFormType) => {
-    await onLogin(values);
-  }, []);
+  const onSubmit = React.useCallback(
+    async (values: LoginFormType) => {
+      await onLogin(values);
+    },
+    [onLogin],
+  );
 
   return (
     <Container
       style={{
-        justifyContent: "center",
+        justifyContent: 'center',
       }}
     >
       <ScrollView>
         <Form methods={methods}>
           <Text
-            style={{ textAlign: "center", fontSize: 24, fontWeight: "600" }}
+            style={{ textAlign: 'center', fontSize: 24, fontWeight: '600' }}
           >
             Adorabbit
           </Text>
           <Text
-            style={{ textAlign: "center", fontSize: 24, fontWeight: "600" }}
+            style={{ textAlign: 'center', fontSize: 24, fontWeight: '600' }}
           >
             Login
           </Text>

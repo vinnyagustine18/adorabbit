@@ -1,5 +1,4 @@
 import React from "react";
-import * as Location from "expo-location";
 import Geolocation from "react-native-geolocation-service";
 import { PermissionsAndroid } from "react-native";
 
@@ -37,7 +36,7 @@ export default function useGetCurrentLocation() {
     };
 
     location === null && exec();
-  }, [location, setLocation]);
+  }, [location]);
 
   return { location };
 }

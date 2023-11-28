@@ -1,12 +1,12 @@
-import { ScrollView, StyleSheet } from "react-native";
-import React from "react";
-import { useGetUsers } from "../../api-hook/user/query";
-import { List } from "react-native-paper";
+import { ScrollView } from 'react-native';
+import React from 'react';
+import { useGetUsers } from '../../api-hook/user/query';
+import { List } from 'react-native-paper';
 
-import FetchWrapperComponent from "../../components/common/fetch-wrapper-component";
-import Container from "../../components/container";
-import { getDistance } from "geolib";
-import useGetCurrentLocation from "../../hooks/use-get-current-location";
+import FetchWrapperComponent from '../../components/common/fetch-wrapper-component';
+import Container from '../../components/container';
+import { getDistance } from 'geolib';
+import useGetCurrentLocation from '../../hooks/use-get-current-location';
 
 export default function TabOneScreen() {
   const query = useGetUsers();
@@ -34,10 +34,11 @@ export default function TabOneScreen() {
                     {
                       latitude: item.latitude,
                       longitude: item.longitude,
-                    }
+                    },
                   ) / 1000;
                 return (
                   <List.Item
+                    key={item.id}
                     title={`${item.name} - ${distance}Km`}
                     onPress={() => console.log(item.id)}
                   />

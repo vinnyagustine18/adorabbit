@@ -1,15 +1,14 @@
-import { useQuery } from "@tanstack/react-query";
 import Select, {
   CustomSelectInputProps,
   ListType,
-} from "../../../components/element/select-input";
+} from '../../../components/element/select-input';
 
-import { useGetTypes } from "../../../api-hook/type/query";
+import { useGetTypes } from '../../../api-hook/type/query';
 
 export interface Props extends CustomSelectInputProps {}
 
 export default function TypeSelectInput(props: Props) {
-  const { disabled, label = "Type", ...rest } = props;
+  const { disabled, label = 'Type', ...rest } = props;
   const query = useGetTypes();
   const data = query.data ?? [];
 

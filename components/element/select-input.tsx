@@ -1,11 +1,10 @@
-import { useController, useFormContext } from "react-hook-form";
+import { useController, useFormContext } from 'react-hook-form';
 
-import { useFormState } from "../form/form";
-import { Text, View } from "../themed";
-import colorConstant from "../../constants/color.constant";
-import React from "react";
-import DropDown, { DropDownPropsInterface } from "react-native-paper-dropdown";
-import { HelperText, TextInput } from "react-native-paper";
+import { useFormState } from '../form/form';
+import { View } from '../themed';
+import React from 'react';
+import DropDown, { DropDownPropsInterface } from 'react-native-paper-dropdown';
+import { HelperText, TextInput } from 'react-native-paper';
 
 export interface ListType {
   label: string;
@@ -16,7 +15,7 @@ export interface ListType {
 export interface SelectInputProps
   extends Omit<
     DropDownPropsInterface,
-    "visible" | "onDismiss" | "showDropDown" | "value" | "setValue" | "list"
+    'visible' | 'onDismiss' | 'showDropDown' | 'value' | 'setValue' | 'list'
   > {
   name: string;
   onAfterDetailChange?: (item: any) => void;
@@ -26,7 +25,7 @@ export interface SelectInputProps
 }
 
 export interface CustomSelectInputProps
-  extends Omit<SelectInputProps, "list"> {}
+  extends Omit<SelectInputProps, 'list'> {}
 
 export default function Select(props: SelectInputProps) {
   const [visible, setVisible] = React.useState<boolean>(false);
@@ -42,7 +41,7 @@ export default function Select(props: SelectInputProps) {
   React.useEffect(() => {
     const item = list.find((item) => field.value === item.value);
     props.onAfterDetailChange?.(item);
-  }, [field.value, list, props.onAfterDetailChange]);
+  }, [field.value, list, props]);
 
   if (_disabled) {
     const item = list.find((_item) => field.value === _item.value);
@@ -52,7 +51,7 @@ export default function Select(props: SelectInputProps) {
           {...rest}
           label={label}
           disabled={_disabled}
-          value={item?.label ?? ""}
+          value={item?.label ?? ''}
         />
         <HelperText type="error" visible={!!fieldState.error?.message}>
           {fieldState.error?.message}

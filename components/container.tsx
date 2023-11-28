@@ -1,5 +1,5 @@
-import { useRouter } from "expo-router";
-import React, { ReactNode, useEffect } from "react";
+import { useRouter } from 'expo-router';
+import React from 'react';
 import {
   View,
   StyleSheet,
@@ -8,8 +8,8 @@ import {
   SafeAreaView,
   ViewStyle,
   BackHandler,
-} from "react-native";
-import colorConstant from "../constants/color.constant";
+} from 'react-native';
+import colorConstant from '../constants/color.constant';
 
 interface Props {
   children: React.ReactNode;
@@ -17,7 +17,7 @@ interface Props {
   bottomSafeArea?: boolean;
   style?: ViewStyle;
   halfBackgroundContainer?: boolean;
-  keyboardAvoidingViewBehavior?: "padding" | "height" | "position" | "none";
+  keyboardAvoidingViewBehavior?: 'padding' | 'height' | 'position' | 'none';
 }
 
 export default function Container(props: Props) {
@@ -27,28 +27,28 @@ export default function Container(props: Props) {
     bottomSafeArea = true,
     style,
     halfBackgroundContainer = false,
-    keyboardAvoidingViewBehavior = "padding",
+    keyboardAvoidingViewBehavior = 'padding',
   } = props;
   const containerStyle = [styles.container, style];
   const router = useRouter();
 
-  useEffect(() => {
+  React.useEffect(() => {
     const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
+      'hardwareBackPress',
       () => {
         router.back();
         return true;
-      }
+      },
     );
     return () => backHandler.remove();
   }, [router]);
 
-  return Platform.OS === "ios" ? (
+  return Platform.OS === 'ios' ? (
     <KeyboardAvoidingView
       keyboardVerticalOffset={0}
       style={containerStyle}
       behavior={
-        keyboardAvoidingViewBehavior === "none"
+        keyboardAvoidingViewBehavior === 'none'
           ? undefined
           : keyboardAvoidingViewBehavior
       }
@@ -73,11 +73,11 @@ const styles = StyleSheet.create({
     paddingTop: 24,
   },
   topBackground: {
-    position: "absolute",
+    position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
-    bottom: "50%",
+    bottom: '50%',
     backgroundColor: colorConstant.white,
   },
 });

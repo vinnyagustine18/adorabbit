@@ -1,51 +1,45 @@
-import React from "react";
-import Form from "../../components/form/form";
-import { RegisterFormSchema, RegisterFormType } from "./form-type";
-import useYupValidationResolver from "../../hooks/use-yup-validation-resolver";
-import { useForm } from "react-hook-form";
-import { Text, View } from "../../components/themed";
+import React from 'react';
+import Form from '../../components/form/form';
+import { RegisterFormSchema, RegisterFormType } from './form-type';
+import useYupValidationResolver from '../../hooks/use-yup-validation-resolver';
+import { useForm } from 'react-hook-form';
+import { Text, View } from '../../components/themed';
 
-import { router } from "expo-router";
-import TextInput from "../../components/element/text-input";
-import Container from "../../components/container";
-import isEmpty from "lodash/isEmpty";
-import AddressComponent from "../../components/address-component";
-import auth from "@react-native-firebase/auth";
-import RadioInput from "../../components/element/radio-input";
-import { UserTypeEnum } from "../../api-hook/user/model";
-import { ScrollView } from "react-native";
-import useGetCurrentLocation from "../../hooks/use-get-current-location";
-import firestore from "@react-native-firebase/firestore";
-import useGetAuthAction from "../../hooks/use-get-auth-action";
-import { Button } from "react-native-paper";
-import colorConstant from "../../constants/color.constant";
+import TextInput from '../../components/element/text-input';
+import Container from '../../components/container';
+import isEmpty from 'lodash/isEmpty';
+import RadioInput from '../../components/element/radio-input';
+import { UserTypeEnum } from '../../api-hook/user/model';
+import { ScrollView } from 'react-native';
+import useGetCurrentLocation from '../../hooks/use-get-current-location';
+import useGetAuthAction from '../../hooks/use-get-auth-action';
+import { Button } from 'react-native-paper';
+import colorConstant from '../../constants/color.constant';
 
 enum RegisterStepEnum {
-  email = "email",
-  address = "address",
+  email = 'email',
+  address = 'address',
 }
 
 export default function RegisterForm() {
   const { location } = useGetCurrentLocation();
-  const { onCreateUser, onSignOut } = useGetAuthAction();
-  const [step, setStep] = React.useState<RegisterStepEnum>(
-    RegisterStepEnum.email
-  );
+  const { onCreateUser } = useGetAuthAction();
+  const [step] = React.useState<RegisterStepEnum>(RegisterStepEnum.email);
   const defaultValues = React.useMemo<RegisterFormType>(() => {
     return {
-      email: "",
-      password: "",
-      passwordConfirmation: "",
+      email: '',
+      password: '',
+      passwordConfirmation: '',
       //
-      name: "",
-      phoneNumber: "",
+      name: '',
+      phoneNumber: '',
       type: UserTypeEnum.user,
       //
-      address: "Universitas Sumatera Utara",
+      address: 'Universitas Sumatera Utara',
       latitude: location?.coords?.latitude ?? 3.566854,
       longitude: location?.coords?.longitude ?? 98.659142,
     };
-  }, []);
+  }, [location]);
 
   const resolver = useYupValidationResolver(RegisterFormSchema()) as any;
 
@@ -54,17 +48,18 @@ export default function RegisterForm() {
     defaultValues,
   });
 
-  const { trigger, setValue } = methods;
-
-  const onSubmit = React.useCallback(async (values: RegisterFormType) => {
-    onCreateUser(values);
-  }, []);
+  const onSubmit = React.useCallback(
+    async (values: RegisterFormType) => {
+      onCreateUser(values);
+    },
+    [onCreateUser],
+  );
 
   const { back, next, onClickBack, onClickNext, title } = React.useMemo(() => {
     return {
-      title: "Register",
-      back: "",
-      next: "Save",
+      title: 'Register',
+      back: '',
+      next: 'Save',
       onClickNext: () => {
         methods.handleSubmit(onSubmit as any)();
       },
@@ -95,7 +90,7 @@ export default function RegisterForm() {
     //       },
     //     };
     // }
-  }, [step, trigger, setStep, methods]);
+  }, [methods, onSubmit]);
 
   const compoenents = React.useCallback(() => {
     switch (step) {
@@ -148,11 +143,11 @@ export default function RegisterForm() {
               label="Type"
               options={[
                 {
-                  label: "User",
+                  label: 'User',
                   value: UserTypeEnum.user,
                 },
                 {
-                  label: "Seller",
+                  label: 'Seller',
                   value: UserTypeEnum.seller,
                 },
               ]}
@@ -180,19 +175,19 @@ export default function RegisterForm() {
     <Container
       style={{
         paddingHorizontal: step === RegisterStepEnum.address ? 0 : 16,
-        justifyContent: "center",
-        alignContent: "center",
+        justifyContent: 'center',
+        alignContent: 'center',
         flex: 1,
       }}
     >
       <Form methods={methods}>
-        <Text style={{ textAlign: "center", fontSize: 24, fontWeight: "600" }}>
+        <Text style={{ textAlign: 'center', fontSize: 24, fontWeight: '600' }}>
           {title}
         </Text>
         {step === RegisterStepEnum.email ? (
           <ScrollView
             style={{
-              height: "75%",
+              height: '75%',
             }}
           >
             {compoenents()}
@@ -203,12 +198,12 @@ export default function RegisterForm() {
 
         <View
           style={{
-            position: step === RegisterStepEnum.address ? "absolute" : "static",
+            position: step === RegisterStepEnum.address ? 'absolute' : 'static',
             bottom: 16,
             flex: 1,
-            width: "100%",
-            backgroundColor: "transparent",
-            flexDirection: "row",
+            width: '100%',
+            backgroundColor: 'transparent',
+            flexDirection: 'row',
             marginTop: 24,
           }}
         >
