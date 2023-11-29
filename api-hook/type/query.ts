@@ -1,12 +1,12 @@
-import firestore from "@react-native-firebase/firestore";
-import { TypeModel } from "./model";
-import { UseQueryOptions, useQuery } from "@tanstack/react-query";
+import firestore from '@react-native-firebase/firestore';
+import { TypeModel } from './model';
+import { UseQueryOptions, useQuery } from '@tanstack/react-query';
 
-const collection = "types";
+const collection = 'types';
 
-const typeKey = {
-  listKey: "types",
-  detailKey: "type",
+export const typeKey = {
+  listKey: 'types',
+  detailKey: 'type',
   list: () => [typeKey.listKey],
   detail: (id: string) => [typeKey.detailKey, id],
 };

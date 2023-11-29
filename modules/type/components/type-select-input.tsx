@@ -14,7 +14,7 @@ export default function TypeSelectInput(props: Props) {
 
   const list: ListType[] = data.map((item) => {
     return {
-      label: `${item.name} - ${item.id}`,
+      label: `${item.name}`,
       value: item.id,
       extra: item,
     };
@@ -22,5 +22,13 @@ export default function TypeSelectInput(props: Props) {
 
   const _disabled = disabled || query.isFetching;
 
-  return <Select {...rest} list={list} disabled={_disabled} label={label} />;
+  return (
+    <Select
+      {...rest}
+      list={list}
+      disabled={_disabled}
+      label={label}
+      addRoute="/type/create"
+    />
+  );
 }

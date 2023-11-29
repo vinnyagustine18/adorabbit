@@ -4,14 +4,13 @@ import useYupValidationResolver from '../../hooks/use-yup-validation-resolver';
 import { useForm } from 'react-hook-form';
 import Form from '../../components/form/form';
 
-import { Button } from 'react-native-paper';
+import { Button, Text } from 'react-native-paper';
 import TextInput from '../../components/element/text-input';
 
-import { Text, View } from '../../components/themed';
-import Container from '../../components/container';
+import { View } from '../../components/themed';
+
 import { Link } from 'expo-router';
 import useGetAuthAction from '../../hooks/use-get-auth-action';
-import { ScrollView } from 'react-native';
 
 interface Props {}
 
@@ -38,45 +37,40 @@ export default function LoginForm(props: Props) {
   );
 
   return (
-    <Container
+    <View
       style={{
+        marginHorizontal: 16,
+        flex: 1,
         justifyContent: 'center',
+        gap: 8,
       }}
     >
-      <ScrollView>
-        <Form methods={methods}>
-          <Text
-            style={{ textAlign: 'center', fontSize: 24, fontWeight: '600' }}
-          >
-            Adorabbit
-          </Text>
-          <Text
-            style={{ textAlign: 'center', fontSize: 24, fontWeight: '600' }}
-          >
-            Login
-          </Text>
+      <Form methods={methods}>
+        <View
+          style={{
+            alignItems: 'center',
+            marginBottom: 24,
+          }}
+        >
+          <Text variant="displaySmall">Adorabbit</Text>
+          <Text variant="headlineMedium">Login</Text>
+        </View>
 
-          <View
-            style={{
-              paddingHorizontal: 16,
-            }}
-          >
-            <TextInput name="email" label="Email" />
+        <TextInput name="email" label="Email" />
 
-            <TextInput name="password" type="password" label="Password" />
+        <TextInput name="password" type="password" label="Password" />
 
-            <Button
-              onPress={methods.handleSubmit(onSubmit as any)}
-              loading={methods.formState.isSubmitting}
-            >
-              Login
-            </Button>
-            <Link href="/register" asChild>
-              <Button>Register</Button>
-            </Link>
-          </View>
-        </Form>
-      </ScrollView>
-    </Container>
+        <Button
+          mode="contained"
+          onPress={methods.handleSubmit(onSubmit as any)}
+          loading={methods.formState.isSubmitting}
+        >
+          Login
+        </Button>
+        <Link href="/register" asChild>
+          <Button>Register</Button>
+        </Link>
+      </Form>
+    </View>
   );
 }

@@ -1,5 +1,5 @@
 import { router, useLocalSearchParams } from 'expo-router';
-import { useGetType } from '../../api-hook/type/query';
+import { typeKey, useGetType } from '../../api-hook/type/query';
 import TypeForm from './components/form';
 import FetchWrapperComponent from '../../components/common/fetch-wrapper-component';
 import { ActivityIndicator } from 'react-native-paper';
@@ -9,6 +9,8 @@ import firestore from '@react-native-firebase/firestore';
 import Toast from '../../components/toast';
 import Container from '../../components/container';
 import useGetAuthAction from '../../hooks/use-get-auth-action';
+import { queryClient } from '../../constants/query-client';
+import { UserModel } from '../../api-hook/user/model';
 
 export default function TypeShow() {
   const params = useLocalSearchParams();
@@ -22,20 +24,27 @@ export default function TypeShow() {
 
   const onSubmit = React.useCallback(
     async (values: TypeFormType, form: TypeFormMethod) => {
+      const { password, ...user } = (
+        await firestore().doc(`users/${userId}`).get()
+      ).data() as UserModel;
+
       const result = await firestore()
         .collection('types')
         .doc(query.data?.id!)
         .update({
           ...values,
-          userId,
+          user,
         });
+
+      queryClient.refetchQueries({ queryKey: typeKey.list() });
+      queryClient.refetchQueries({ queryKey: typeKey.detail(id) });
 
       Toast.success('Data Berhasil diubah');
       router.back();
 
       return result;
     },
-    [query.data?.id, userId],
+    [id, query.data?.id, userId],
   );
 
   return (

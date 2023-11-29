@@ -1,12 +1,13 @@
-import { ScrollView } from "react-native";
-import { useGetRabbits } from "../../api-hook/rabbit/query";
-import Container from "../../components/container";
-import FetchWrapperComponent from "../../components/common/fetch-wrapper-component";
-import { AnimatedFAB, Divider, List } from "react-native-paper";
-import { router } from "expo-router";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { View } from "../../components/themed";
-import { capitalize } from "lodash";
+import { ScrollView } from 'react-native';
+import { useGetRabbits } from '../../api-hook/rabbit/query';
+import Container from '../../components/container';
+import FetchWrapperComponent from '../../components/common/fetch-wrapper-component';
+import { AnimatedFAB, Divider, List } from 'react-native-paper';
+import { router } from 'expo-router';
+import Icons from 'react-native-vector-icons/Feather';
+
+import { View } from '../../components/themed';
+import { capitalize } from 'lodash';
 
 export default function RabbitList() {
   const query = useGetRabbits();
@@ -15,12 +16,12 @@ export default function RabbitList() {
   return (
     <Container>
       <AnimatedFAB
-        icon={() => <FontAwesome name="plus" size={24} />}
-        onPress={() => router.push("/rabbit/create")}
+        icon={() => <Icons name="plus" size={20} />}
+        onPress={() => router.push('/rabbit/create')}
         extended={false}
         label="Create Rabbit"
         style={{
-          position: "absolute",
+          position: 'absolute',
           bottom: 16,
           right: 16,
           zIndex: 3,
@@ -43,7 +44,7 @@ export default function RabbitList() {
                       item.name,
                       item.type.name,
                       capitalize(item.gender),
-                    ].join(" - ")}
+                    ].join(' - ')}
                     key={item.id}
                     onPress={() => router.push(`/rabbit/${item.id}`)}
                   />

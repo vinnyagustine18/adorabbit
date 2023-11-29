@@ -1,8 +1,8 @@
-import { useFormContext } from "react-hook-form";
-import { useFormState } from "./form";
-import { View } from "../themed";
-import { Button } from "react-native-paper";
-import colorConstant from "../../constants/color.constant";
+import { useFormContext } from 'react-hook-form';
+import { useFormState } from './form';
+import { View } from '../themed';
+import { Button } from 'react-native-paper';
+import colorConstant from '../../constants/color.constant';
 
 interface Props {
   data?: any;
@@ -17,12 +17,14 @@ export default function FormFooter(props: Props) {
     <>
       <View
         style={{
-          flexDirection: "row",
+          flexDirection: 'row',
           gap: 16,
-          position: "absolute",
-          bottom: 16,
-          left: 16,
-          right: 16,
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          padding: 16,
+          backgroundColor: colorConstant.white,
         }}
       >
         {!!data && (

@@ -1,12 +1,12 @@
-import firestore from "@react-native-firebase/firestore";
-import { MateModel } from "./model";
-import { UseQueryOptions, useQuery } from "@tanstack/react-query";
+import firestore from '@react-native-firebase/firestore';
+import { MateModel } from './model';
+import { UseQueryOptions, useQuery } from '@tanstack/react-query';
 
-const collection = "mates";
+const collection = 'mates';
 
-const mateKey = {
-  listKey: "mates",
-  detailKey: "mate",
+export const mateKey = {
+  listKey: 'mates',
+  detailKey: 'mate',
   list: () => [mateKey.listKey],
   detail: (id: string) => [mateKey.detailKey, id],
 };
@@ -16,14 +16,14 @@ export function useGetMates(options?: UseQueryOptions<MateModel[]>) {
     queryKey: options?.queryKey ?? mateKey.list(),
     queryFn: async () => {
       const result = await firestore().collection(collection).get();
-      const users: MateModel[] = [];
+      const mates: MateModel[] = [];
 
       result.forEach((result) => {
-        const user = result.data() as MateModel;
-        users.push({ ...user, id: result.id });
+        const mate = result.data() as any;
+        mates.push({ ...mate, mateAt: mate.mateAt.toDate(), key: result.id });
       });
 
-      return users;
+      return mates;
     },
     ...options,
   });
@@ -31,10 +31,11 @@ export function useGetMates(options?: UseQueryOptions<MateModel[]>) {
 
 export function useGetMate(id: string, options?: UseQueryOptions<MateModel>) {
   return useQuery({
-    queryKey: options?.queryKey ?? mateKey.list(),
+    queryKey: options?.queryKey ?? mateKey.detail(id),
     queryFn: async () => {
       const result = await firestore().collection(collection).doc(id).get();
-      return { ...(result.data() as MateModel), id: result.id };
+      const mate = result.data() as any;
+      return { ...mate, mateAt: mate.mateAt.toDate(), key: result.id };
     },
     ...options,
   });

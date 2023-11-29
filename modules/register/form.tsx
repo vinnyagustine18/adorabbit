@@ -3,7 +3,7 @@ import Form from '../../components/form/form';
 import { RegisterFormSchema, RegisterFormType } from './form-type';
 import useYupValidationResolver from '../../hooks/use-yup-validation-resolver';
 import { useForm } from 'react-hook-form';
-import { Text, View } from '../../components/themed';
+import { View } from '../../components/themed';
 
 import TextInput from '../../components/element/text-input';
 import Container from '../../components/container';
@@ -13,7 +13,7 @@ import { UserTypeEnum } from '../../api-hook/user/model';
 import { ScrollView } from 'react-native';
 import useGetCurrentLocation from '../../hooks/use-get-current-location';
 import useGetAuthAction from '../../hooks/use-get-auth-action';
-import { Button } from 'react-native-paper';
+import { Button, Text } from 'react-native-paper';
 import colorConstant from '../../constants/color.constant';
 
 enum RegisterStepEnum {
@@ -181,13 +181,17 @@ export default function RegisterForm() {
       }}
     >
       <Form methods={methods}>
-        <Text style={{ textAlign: 'center', fontSize: 24, fontWeight: '600' }}>
+        <Text
+          variant="headlineMedium"
+          style={{ textAlign: 'center', fontWeight: '600', marginBottom: 16 }}
+        >
           {title}
         </Text>
         {step === RegisterStepEnum.email ? (
           <ScrollView
+            overScrollMode="always"
             style={{
-              height: '75%',
+              height: '80%',
             }}
           >
             {compoenents()}
@@ -218,13 +222,14 @@ export default function RegisterForm() {
             </Button>
           )}
           <Button
-            style={{ flex: 1, marginHorizontal: 16 }}
+            style={{ flex: 1 }}
             onPress={onClickNext}
             loading={methods.formState.isSubmitting}
             disabled={
               !isEmpty(methods.formState.errors) ||
               methods.formState.isSubmitting
             }
+            mode="contained"
           >
             {next}
           </Button>

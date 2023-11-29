@@ -10,6 +10,8 @@ import { getSubmitData } from './utils';
 import RabbitForm from './components/form';
 import { nanoid } from 'nanoid';
 import { Text } from 'react-native-paper';
+import { rabbitKey } from '../../api-hook/rabbit/query';
+import { queryClient } from '../../constants/query-client';
 
 export default function RabbitCreate() {
   const { user, isLoading } = useGetAuthAction();
@@ -18,10 +20,13 @@ export default function RabbitCreate() {
     async (values: RabbitFormType, form: RabbitFormMethod) => {
       const rabbit = await getSubmitData(values, userId!);
       const id = nanoid(10);
+
       const result = await firestore()
         .collection('rabbits')
         .doc(id)
         .set({ ...rabbit, id });
+
+      queryClient.refetchQueries({ queryKey: rabbitKey.list() });
 
       Toast.success('Data Berhasil Disimpan');
       router.back();

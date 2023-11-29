@@ -5,6 +5,7 @@ import { View } from '../themed';
 import React from 'react';
 import DropDown, { DropDownPropsInterface } from 'react-native-paper-dropdown';
 import { HelperText, TextInput } from 'react-native-paper';
+import { router } from 'expo-router';
 
 export interface ListType {
   label: string;
@@ -22,6 +23,7 @@ export interface SelectInputProps
   onAfterChange?: (item: any) => void;
   disabled?: boolean;
   list: ListType[];
+  addRoute?: string;
 }
 
 export interface CustomSelectInputProps
@@ -29,7 +31,7 @@ export interface CustomSelectInputProps
 
 export default function Select(props: SelectInputProps) {
   const [visible, setVisible] = React.useState<boolean>(false);
-  const { name, label, list, disabled, ...rest } = props;
+  const { name, label, list, disabled, addRoute, ...rest } = props;
   const { control } = useFormContext();
   const { field, fieldState } = useController({
     name,
@@ -65,12 +67,28 @@ export default function Select(props: SelectInputProps) {
       <DropDown
         {...rest}
         label={label}
-        list={list}
+        list={[
+          ...list,
+          ...(addRoute
+            ? [
+                {
+                  label: 'Create Data',
+                  value: 'create',
+                },
+              ]
+            : []),
+        ]}
         onDismiss={() => setVisible(false)}
         visible={visible}
         showDropDown={() => setVisible(true)}
         value={field.value}
-        setValue={(value) => field.onChange(value)}
+        setValue={(value) => {
+          if (value === 'create') {
+            router.push((addRoute ?? '/type/') as any);
+            return;
+          }
+          field.onChange(value);
+        }}
       />
       <HelperText type="error" visible={!!fieldState.error?.message}>
         {fieldState.error?.message}

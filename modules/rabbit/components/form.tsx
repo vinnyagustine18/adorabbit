@@ -86,7 +86,12 @@ export default function RabbitForm(props: Props) {
               label="Type"
               placeholder="Fill the type"
             />
-            <DateInput name="birthAt" placeholder="Birth Date" />
+
+            <DateInput
+              name="birthAt"
+              label="Birth Date"
+              placeholder="Birth Date"
+            />
 
             <TextInput
               keyboardType="number-pad"

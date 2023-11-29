@@ -20,6 +20,7 @@ export default function Profile() {
             title="Rabbit List"
             onPress={() => router.push('/rabbit/')}
           />
+          <List.Item title="Mate List" onPress={() => router.push('/mate/')} />
           <Divider />
           <List.Item title="Logout" onPress={onSignOut} />
         </List.Section>

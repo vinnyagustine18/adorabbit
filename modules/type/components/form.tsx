@@ -54,6 +54,7 @@ export default function TypeForm(props: Props) {
         <View
           style={{
             marginHorizontal: 16,
+            marginTop: 16,
           }}
         >
           <TextInput name="name" placeholder="Fill the name" label="Name" />

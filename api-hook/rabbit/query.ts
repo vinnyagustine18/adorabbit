@@ -1,12 +1,12 @@
-import firestore from "@react-native-firebase/firestore";
-import { RabbitModel } from "./model";
-import { UseQueryOptions, useQuery } from "@tanstack/react-query";
+import firestore from '@react-native-firebase/firestore';
+import { RabbitModel } from './model';
+import { UseQueryOptions, useQuery } from '@tanstack/react-query';
 
-const collection = "rabbits";
+const collection = 'rabbits';
 
-const rabbitKey = {
-  listKey: "rabbits",
-  detailKey: "rabbit",
+export const rabbitKey = {
+  listKey: 'rabbits',
+  detailKey: 'rabbit',
   list: () => [rabbitKey.listKey],
   detail: (id: string) => [rabbitKey.detailKey, id],
 };
@@ -35,7 +35,7 @@ export function useGetRabbits(options?: UseQueryOptions<RabbitModel[]>) {
 
 export function useGetRabbit(
   id: string,
-  options?: UseQueryOptions<RabbitModel>
+  options?: UseQueryOptions<RabbitModel>,
 ) {
   return useQuery({
     queryKey: options?.queryKey ?? rabbitKey.detail(id),

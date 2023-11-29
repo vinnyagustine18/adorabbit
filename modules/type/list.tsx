@@ -4,7 +4,8 @@ import FetchWrapperComponent from '../../components/common/fetch-wrapper-compone
 import Container from '../../components/container';
 import { AnimatedFAB, Divider, List } from 'react-native-paper';
 import { router } from 'expo-router';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
+import Icons from 'react-native-vector-icons/Feather';
+
 import colorConstant from '../../constants/color.constant';
 import { View } from '../../components/themed';
 
@@ -15,9 +16,7 @@ export default function TypeList() {
   return (
     <Container>
       <AnimatedFAB
-        icon={() => (
-          <FontAwesome name="plus" size={20} color={colorConstant.gray1} />
-        )}
+        icon={() => <Icons name="plus" size={20} />}
         onPress={() => router.push('/type/create')}
         extended={false}
         label="Create Type"

@@ -1,4 +1,5 @@
-import { RabbitModel } from "../rabbit/model";
+import { RabbitModel } from '../rabbit/model';
+import { UserModel } from '../user/model';
 
 export type MateModel = {
   id: string;
@@ -8,5 +9,6 @@ export type MateModel = {
   maleRabbit: RabbitModel;
   femaleRabbit: RabbitModel;
 
-  userId: string;
+  user: UserModel;
+  key: string;
 };

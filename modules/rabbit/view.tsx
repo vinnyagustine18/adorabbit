@@ -7,10 +7,11 @@ import firestore from '@react-native-firebase/firestore';
 import Toast from '../../components/toast';
 import Container from '../../components/container';
 import useGetAuthAction from '../../hooks/use-get-auth-action';
-import { useGetRabbit } from '../../api-hook/rabbit/query';
+import { rabbitKey, useGetRabbit } from '../../api-hook/rabbit/query';
 import { RabbitFormMethod, RabbitFormType } from './components/form-type';
 import RabbitForm from './components/form';
 import { getSubmitData } from './utils';
+import { queryClient } from '../../constants/query-client';
 
 export default function RabbitShow() {
   const params = useLocalSearchParams();
@@ -31,12 +32,15 @@ export default function RabbitShow() {
         .doc(query.data?.id!)
         .update(rabbit);
 
+      queryClient.refetchQueries({ queryKey: rabbitKey.list() });
+      queryClient.refetchQueries({ queryKey: rabbitKey.detail(id) });
+
       Toast.success('Data Berhasil diubah');
       router.back();
 
       return result;
     },
-    [query.data?.id, userId],
+    [id, query.data?.id, userId],
   );
 
   return (
