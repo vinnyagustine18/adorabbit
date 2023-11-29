@@ -21,6 +21,7 @@ export default function Profile() {
             onPress={() => router.push('/rabbit/')}
           />
           <List.Item title="Mate List" onPress={() => router.push('/mate/')} />
+          <List.Item title="Drug List" onPress={() => router.push('/drug/')} />
           <Divider />
           <List.Item title="Logout" onPress={onSignOut} />
         </List.Section>

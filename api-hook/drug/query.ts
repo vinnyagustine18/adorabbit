@@ -4,7 +4,7 @@ import firestore from '@react-native-firebase/firestore';
 
 const collection = 'drugs';
 
-const drugKey = {
+export const drugKey = {
   listKey: 'drugs',
   detailKey: 'drug',
   list: () => [drugKey.listKey],
@@ -16,14 +16,14 @@ export function useGetDrugs(options?: UseQueryOptions<DrugModel[]>) {
     queryKey: options?.queryKey ?? drugKey.list(),
     queryFn: async () => {
       const result = await firestore().collection(collection).get();
-      const users: DrugModel[] = [];
+      const drugs: DrugModel[] = [];
 
       result.forEach((result) => {
-        const user = result.data() as DrugModel;
-        users.push({ ...user, id: result.id });
+        const drug = result.data() as DrugModel;
+        drugs.push({ ...drug, key: result.id });
       });
 
-      return users;
+      return drugs;
     },
     ...options,
   });
@@ -34,7 +34,7 @@ export function useGetDrug(id: string, options?: UseQueryOptions<DrugModel>) {
     queryKey: options?.queryKey ?? drugKey.detail(id),
     queryFn: async () => {
       const result = await firestore().collection(collection).doc(id).get();
-      return { ...(result.data() as DrugModel), id: result.id };
+      return { ...(result.data() as DrugModel), key: result.id };
     },
     ...options,
   });

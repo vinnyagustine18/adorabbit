@@ -6,7 +6,6 @@ import { AnimatedFAB, Divider, List } from 'react-native-paper';
 import { router } from 'expo-router';
 import Icons from 'react-native-vector-icons/Feather';
 
-import colorConstant from '../../constants/color.constant';
 import { View } from '../../components/themed';
 
 export default function TypeList() {
