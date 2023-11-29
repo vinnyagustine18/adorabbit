@@ -1,12 +1,12 @@
-import firestore from "@react-native-firebase/firestore";
-import { VacineModel } from "./model";
-import { UseQueryOptions, useQuery } from "@tanstack/react-query";
+import firestore from '@react-native-firebase/firestore';
+import { VacineModel } from './model';
+import { UseQueryOptions, useQuery } from '@tanstack/react-query';
 
-const collection = "vacines";
+const collection = 'vacines';
 
-const vacineKey = {
-  listKey: "vacines",
-  detailKey: "vacine",
+export const vacineKey = {
+  listKey: 'vacines',
+  detailKey: 'vacine',
   list: () => [vacineKey.listKey],
   detail: (id: string) => [vacineKey.detailKey, id],
 };
@@ -16,14 +16,18 @@ export function useGetVacines(options?: UseQueryOptions<VacineModel[]>) {
     queryKey: options?.queryKey ?? vacineKey.list(),
     queryFn: async () => {
       const result = await firestore().collection(collection).get();
-      const users: VacineModel[] = [];
+      const vacines: VacineModel[] = [];
 
       result.forEach((result) => {
-        const user = result.data() as VacineModel;
-        users.push({ ...user, id: result.id });
+        const vacine = result.data() as any;
+        vacines.push({
+          ...vacine,
+          vacineAt: vacine.vacineAt.toDate(),
+          key: result.id,
+        });
       });
 
-      return users;
+      return vacines;
     },
     ...options,
   });
@@ -31,13 +35,14 @@ export function useGetVacines(options?: UseQueryOptions<VacineModel[]>) {
 
 export function useGetVacine(
   id: string,
-  options?: UseQueryOptions<VacineModel>
+  options?: UseQueryOptions<VacineModel>,
 ) {
   return useQuery({
-    queryKey: options?.queryKey ?? vacineKey.list(),
+    queryKey: options?.queryKey ?? vacineKey.detail(id),
     queryFn: async () => {
       const result = await firestore().collection(collection).doc(id).get();
-      return { ...(result.data() as VacineModel), id: result.id };
+      const vacine = result.data() as any;
+      return { ...vacine, vacineAt: vacine.vacineAt.toDate(), key: result.id };
     },
     ...options,
   });

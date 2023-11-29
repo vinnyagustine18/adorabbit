@@ -1,13 +1,14 @@
-import { useForm } from "react-hook-form";
-import * as Yup from "yup";
+import * as Yup from 'yup';
+
+import { useForm } from 'react-hook-form';
 
 export const VacineFormSchema = () =>
   Yup.object({
     vacineAt: Yup.date().required().default(new Date()),
     // drug table
-    drugId: Yup.string().required().default(""),
+    drugId: Yup.string().required().default(''),
     // rabbit table
-    rabbitId: Yup.string().required().default(""),
+    rabbitId: Yup.string().required().default(''),
   });
 
 export type VacineFormType = Yup.InferType<ReturnType<typeof VacineFormSchema>>;
