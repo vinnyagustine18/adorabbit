@@ -1,8 +1,9 @@
-import { RabbitModel } from "../rabbit/model";
+import { RabbitModel } from '../rabbit/model';
+import { UserModel } from '../user/model';
 
 export enum HealthStatusEnum {
-  well = "well",
-  sick = "sick",
+  well = 'well',
+  sick = 'sick',
 }
 
 export type HealthModel = {
@@ -13,6 +14,7 @@ export type HealthModel = {
   description: string;
 
   rabbit: RabbitModel;
+  user: UserModel;
 
-  userId: string;
+  key: string;
 };

@@ -26,6 +26,10 @@ export default function Profile() {
             title="Vacine List"
             onPress={() => router.push('/vacine/')}
           />
+          <List.Item
+            title="Health List"
+            onPress={() => router.push('/health/')}
+          />
           <Divider />
           <List.Item title="Logout" onPress={onSignOut} />
         </List.Section>
