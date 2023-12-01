@@ -1,14 +1,14 @@
-import { TypeModel } from "../type/model";
-import { GenderEnum, UserModel } from "../user/model";
+import { TypeModel } from '../type/model';
+import { GenderEnum, UserModel } from '../user/model';
 
 export enum RabbitStatusEnum {
-  alive = "alive",
-  deceased = "deceased",
+  alive = 'alive',
+  deceased = 'deceased',
 }
 
 export enum RabbitOwnershipEnum {
-  commercial = "commercial",
-  collection = "collection",
+  commercial = 'commercial',
+  collection = 'collection',
 }
 
 export type RabbitModel = {
