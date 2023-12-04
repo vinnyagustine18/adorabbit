@@ -40,7 +40,8 @@ export default function TabOneScreen() {
           ...item,
           distance,
         };
-      });
+      })
+      .sort((a, b) => a.distance - b.distance);
   }, [
     data,
     location?.coords.latitude,
