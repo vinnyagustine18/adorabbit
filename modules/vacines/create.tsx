@@ -18,7 +18,7 @@ import VacineForm from './components/form';
 
 export default function VacineCreate() {
   const { user, isLoading } = useGetAuthAction();
-  const userId = user?.uid;
+  const userId = user?.id;
 
   const onSubmit = React.useCallback(
     async (values: VacineFormType, form: VacineFormMethod) => {

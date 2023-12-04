@@ -18,7 +18,7 @@ export default function VacineShow() {
   const { id } = params as any;
 
   const { user, isLoading } = useGetAuthAction();
-  const userId = user?.uid;
+  const userId = user?.id;
   const query = useGetVacine(id);
   const vacine = query.data;
 
@@ -28,7 +28,7 @@ export default function VacineShow() {
 
       const result = await firestore()
         .collection('vacines')
-        .doc(query.data?.id!)
+        .doc(id)
         .update(vacine);
 
       queryClient.refetchQueries({ queryKey: vacineKey.list() });
@@ -39,7 +39,7 @@ export default function VacineShow() {
 
       return result;
     },
-    [id, query.data?.id, userId],
+    [id, userId],
   );
   return (
     <Container>

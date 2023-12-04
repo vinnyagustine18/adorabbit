@@ -1,9 +1,9 @@
-import { UserModel } from "../../api-hook/user/model";
-import { RabbitFormType } from "./components/form-type";
-import firestore from "@react-native-firebase/firestore";
+import { UserModel } from '../../api-hook/user/model';
+import { RabbitFormType } from './components/form-type';
+import firestore from '@react-native-firebase/firestore';
 
 export async function getSubmitData(values: RabbitFormType, userId: string) {
-  const { typeId, ...rest } = values;
+  const { typeId, price, quantity, ...rest } = values;
 
   //get the type
   const type = (await firestore().doc(`types/${typeId}`).get()).data();
@@ -16,5 +16,11 @@ export async function getSubmitData(values: RabbitFormType, userId: string) {
   //extract the password
   const { password, ...user } = _user;
 
-  return { ...rest, type, user };
+  return {
+    ...rest,
+    price: parseFloat(price),
+    quantity: parseFloat(quantity),
+    type,
+    user,
+  };
 }

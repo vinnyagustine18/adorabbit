@@ -3,42 +3,51 @@ import { router, useLocalSearchParams } from 'expo-router';
 import FetchWrapperComponent from '../../components/common/fetch-wrapper-component';
 import { ActivityIndicator } from 'react-native-paper';
 import React from 'react';
-import { DrugFormMethod, DrugFormType } from './components/form-type';
+import { BirthFormMethod, BirthFormType } from './components/form-type';
 import firestore from '@react-native-firebase/firestore';
 import Toast from '../../components/toast';
 import Container from '../../components/container';
 import useGetAuthAction from '../../hooks/use-get-auth-action';
 import { queryClient } from '../../constants/query-client';
 import { UserModel } from '../../api-hook/user/model';
-import DrugForm from './components/form';
-import { drugKey, useGetDrug } from '../../api-hook/drug/query';
+import { birthKey, useGetBirth } from '../../api-hook/birth/query';
+import BirthForm from './components/form';
 
-export default function DrugShow() {
+export default function BirthShow() {
   const params = useLocalSearchParams();
   const { id } = params as any;
 
   const { user, isLoading } = useGetAuthAction();
   const userId = user?.id;
 
-  const query = useGetDrug(id);
-  const drug = query.data;
+  const query = useGetBirth(id);
+  const birth = query.data;
 
   const onSubmit = React.useCallback(
-    async (values: DrugFormType, form: DrugFormMethod) => {
+    async (values: BirthFormType, form: BirthFormMethod) => {
+      const { mateId, rabbitId, ...rest } = values;
+
       const { password, ...user } = (
         await firestore().doc(`users/${userId}`).get()
       ).data() as UserModel;
 
+      const rabbit = (
+        await firestore().doc(`rabbits/${rabbitId}`).get()
+      ).data();
+      const mate = (await firestore().doc(`mates/${mateId}`).get()).data();
+
       const result = await firestore()
-        .collection('drugs')
+        .collection('births')
         .doc(id)
         .update({
-          ...values,
+          ...rest,
           user,
+          rabbit,
+          mate,
         });
 
-      queryClient.refetchQueries({ queryKey: drugKey.list() });
-      queryClient.refetchQueries({ queryKey: drugKey.detail(id) });
+      queryClient.refetchQueries({ queryKey: birthKey.list() });
+      queryClient.refetchQueries({ queryKey: birthKey.detail(id) });
 
       Toast.success('Data Berhasil diubah');
       router.back();
@@ -55,7 +64,7 @@ export default function DrugShow() {
         error={query.error?.message}
         isLoading={query.isFetching || isLoading}
         loadingComponent={<ActivityIndicator />}
-        component={<DrugForm drug={drug} onSubmit={onSubmit} />}
+        component={<BirthForm birth={birth} onSubmit={onSubmit} />}
       />
     </Container>
   );

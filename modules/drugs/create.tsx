@@ -18,7 +18,7 @@ import { drugKey } from '../../api-hook/drug/query';
 
 export default function DrugCreate() {
   const { user, isLoading } = useGetAuthAction();
-  const userId = user?.uid;
+  const userId = user?.id;
 
   const onSubmit = React.useCallback(
     async (values: DrugFormType, form: DrugFormMethod) => {

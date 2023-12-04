@@ -17,7 +17,7 @@ export default function MateShow() {
   const { id } = params as any;
 
   const { user, isLoading } = useGetAuthAction();
-  const userId = user?.uid;
+  const userId = user?.id;
   const query = useGetMate(id);
   const mate = query.data;
 
@@ -25,10 +25,7 @@ export default function MateShow() {
     async (values: MateFormType, form: MateFormMethod) => {
       const mate = await getSubmitData(values, userId!);
 
-      const result = await firestore()
-        .collection('mates')
-        .doc(query.data?.id!)
-        .update(mate);
+      const result = await firestore().collection('mates').doc(id).update(mate);
 
       queryClient.refetchQueries({ queryKey: mateKey.list() });
       queryClient.refetchQueries({ queryKey: mateKey.detail(id) });
@@ -38,7 +35,7 @@ export default function MateShow() {
 
       return result;
     },
-    [id, query.data?.id, userId],
+    [id, userId],
   );
   return (
     <Container>

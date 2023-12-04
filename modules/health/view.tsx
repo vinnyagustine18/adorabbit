@@ -18,7 +18,7 @@ export default function HealthShow() {
   const { id } = params as any;
 
   const { user, isLoading } = useGetAuthAction();
-  const userId = user?.uid;
+  const userId = user?.id;
 
   const query = useGetHealth(id);
   const health = query.data;
@@ -29,7 +29,7 @@ export default function HealthShow() {
 
       const result = await firestore()
         .collection('healths')
-        .doc(query.data?.id!)
+        .doc(id)
         .update(health);
 
       queryClient.refetchQueries({ queryKey: healthKey.list() });
@@ -40,7 +40,7 @@ export default function HealthShow() {
 
       return result;
     },
-    [id, query.data?.id, userId],
+    [id, userId],
   );
 
   return (

@@ -40,7 +40,7 @@ export default function TypeList() {
                   <List.Item
                     key={item.id}
                     onPress={() => router.push(`/type/${item.id}`)}
-                    title={[item.name, item.id].join(' - ')}
+                    title={[item.name].join(' - ')}
                   />
                   <Divider />
                 </View>

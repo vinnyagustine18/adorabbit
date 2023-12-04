@@ -21,7 +21,7 @@ export default function TypeForm(props: Props) {
   const { drug } = props;
   const defaultValues = React.useMemo<DrugFormType>(() => {
     return {
-      dose: drug?.dose ?? 0,
+      dose: drug?.dose ?? '',
       type: drug?.type ?? '',
     };
   }, [drug]);

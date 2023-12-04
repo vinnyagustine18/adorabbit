@@ -23,6 +23,7 @@ import TextInput from '../../../components/element/text-input';
 import RadioInput from '../../../components/element/radio-input';
 import TypeSelectInput from '../../type/components/type-select-input';
 import { View } from '../../../components/themed';
+import CheckboxInput from '../../../components/element/checkbox-input';
 
 interface Props {
   rabbit?: RabbitModel;
@@ -39,9 +40,11 @@ export default function RabbitForm(props: Props) {
       name: rabbit?.name ?? '',
       ownershipStatus:
         rabbit?.ownershipStatus ?? RabbitOwnershipEnum.collection,
-      price: rabbit?.price ?? 0,
+      price: rabbit?.price?.toString() ?? '',
       status: rabbit?.status ?? RabbitStatusEnum.alive,
       typeId: rabbit?.type?.id ?? '',
+      isActive: rabbit?.isActive ?? true,
+      quantity: rabbit?.quantity?.toString() ?? '',
     };
   }, [rabbit]);
 
@@ -77,6 +80,7 @@ export default function RabbitForm(props: Props) {
             style={{
               marginTop: 16,
               marginHorizontal: 16,
+              paddingBottom: 64,
             }}
           >
             <TextInput name="name" label="Name" />
@@ -101,10 +105,19 @@ export default function RabbitForm(props: Props) {
             />
 
             <TextInput
+              keyboardType="number-pad"
+              name="quantity"
+              label="Quantity"
+              placeholder="Fill the Quantity"
+            />
+
+            <TextInput
               name="description"
               label="Description"
               placeholder="Fill the description"
             />
+
+            <CheckboxInput label="Is Active" name="isActive" />
 
             <RadioInput
               name="gender"

@@ -15,7 +15,8 @@ import { queryClient } from '../../constants/query-client';
 
 export default function RabbitCreate() {
   const { user, isLoading } = useGetAuthAction();
-  const userId = user?.uid;
+  const userId = user?.id;
+
   const onSubmit = React.useCallback(
     async (values: RabbitFormType, form: RabbitFormMethod) => {
       const rabbit = await getSubmitData(values, userId!);
@@ -34,6 +35,7 @@ export default function RabbitCreate() {
     },
     [userId],
   );
+
   return (
     <Container>
       {isLoading ? (

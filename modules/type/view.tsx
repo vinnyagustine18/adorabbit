@@ -17,7 +17,7 @@ export default function TypeShow() {
   const { id } = params as any;
 
   const { user, isLoading } = useGetAuthAction();
-  const userId = user?.uid;
+  const userId = user?.id;
 
   const query = useGetType(id);
   const type = query.data;
@@ -30,7 +30,7 @@ export default function TypeShow() {
 
       const result = await firestore()
         .collection('types')
-        .doc(query.data?.id!)
+        .doc(id)
         .update({
           ...values,
           user,
@@ -44,7 +44,7 @@ export default function TypeShow() {
 
       return result;
     },
-    [id, query.data?.id, userId],
+    [id, userId],
   );
 
   return (

@@ -5,6 +5,8 @@ import { UserModel } from '../user/model';
 export type BirthModel = {
   id: string;
   birthAt: Date;
+  birthWeight: number;
+  description: string;
 
   mate: MateModel;
   rabbit: RabbitModel;

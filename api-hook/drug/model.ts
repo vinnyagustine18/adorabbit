@@ -3,7 +3,7 @@ import { UserModel } from '../user/model';
 export type DrugModel = {
   id: string;
   type: string;
-  dose: number;
+  dose: string;
 
   user: UserModel;
 

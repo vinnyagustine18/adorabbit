@@ -17,7 +17,7 @@ import { getSubmitData } from './utils';
 
 export default function MateCreate() {
   const { user, isLoading } = useGetAuthAction();
-  const userId = user?.uid;
+  const userId = user?.id;
 
   const onSubmit = React.useCallback(
     async (values: MateFormType, form: MateFormMethod) => {

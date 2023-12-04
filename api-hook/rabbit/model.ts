@@ -20,6 +20,8 @@ export type RabbitModel = {
   ownershipStatus: RabbitOwnershipEnum;
   price: number;
   description: string;
+  isActive: boolean;
+  quantity: number;
 
   //type table
   type: TypeModel;

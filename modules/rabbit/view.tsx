@@ -18,7 +18,7 @@ export default function RabbitShow() {
   const { id } = params as any;
 
   const { user, isLoading } = useGetAuthAction();
-  const userId = user?.uid;
+  const userId = user?.id;
 
   const query = useGetRabbit(id);
   const rabbit = query.data;
@@ -29,7 +29,7 @@ export default function RabbitShow() {
 
       const result = await firestore()
         .collection('rabbits')
-        .doc(query.data?.id!)
+        .doc(id)
         .update(rabbit);
 
       queryClient.refetchQueries({ queryKey: rabbitKey.list() });
@@ -40,7 +40,7 @@ export default function RabbitShow() {
 
       return result;
     },
-    [id, query.data?.id, userId],
+    [id, userId],
   );
 
   return (

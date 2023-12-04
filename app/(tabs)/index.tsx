@@ -7,11 +7,48 @@ import FetchWrapperComponent from '../../components/common/fetch-wrapper-compone
 import Container from '../../components/container';
 import { getDistance } from 'geolib';
 import useGetCurrentLocation from '../../hooks/use-get-current-location';
+import { UserTypeEnum } from '../../api-hook/user/model';
+import useGetAuthAction from '../../hooks/use-get-auth-action';
+import { router } from 'expo-router';
 
 export default function TabOneScreen() {
   const query = useGetUsers();
-  const data = query.data ?? [];
   const { location } = useGetCurrentLocation();
+  const { user } = useGetAuthAction();
+
+  const data = React.useMemo(() => {
+    return query.data ?? [];
+  }, [query.data]);
+
+  const _data = React.useMemo(() => {
+    return data
+      .filter((item) => item.type === UserTypeEnum.seller)
+      .map((item) => {
+        const distance =
+          getDistance(
+            {
+              latitude: location?.coords.latitude ?? user?.latitude ?? 3.566854,
+              longitude:
+                location?.coords.longitude ?? user?.longitude ?? 98.659142,
+            },
+            {
+              latitude: item.latitude,
+              longitude: item.longitude,
+            },
+          ) / 1000;
+        return {
+          ...item,
+          distance,
+        };
+      });
+  }, [
+    data,
+    location?.coords.latitude,
+    location?.coords.longitude,
+    user?.latitude,
+    user?.longitude,
+  ]);
+
   return (
     <Container>
       <ScrollView>
@@ -22,25 +59,13 @@ export default function TabOneScreen() {
           onRetry={query.refetch}
           component={
             <List.Section>
-              <List.Subheader>Users</List.Subheader>
-              {data.map((item) => {
-                //return meter value
-                const distance =
-                  getDistance(
-                    {
-                      latitude: location?.coords.latitude ?? 3.566854,
-                      longitude: location?.coords.longitude ?? 98.659142,
-                    },
-                    {
-                      latitude: item.latitude,
-                      longitude: item.longitude,
-                    },
-                  ) / 1000;
+              <List.Subheader>Seller</List.Subheader>
+              {_data.map((item) => {
                 return (
                   <List.Item
                     key={item.id}
-                    title={`${item.name} - ${distance}Km`}
-                    onPress={() => console.log(item.id)}
+                    title={`${item.name} - ${item.distance}Km`}
+                    onPress={() => router.push(`/seller/${item.id}`)}
                   />
                 );
               })}

@@ -1,25 +1,26 @@
 import { ScrollView } from 'react-native';
-import { useGetRabbits } from '../../api-hook/rabbit/query';
-import Container from '../../components/container';
+
 import FetchWrapperComponent from '../../components/common/fetch-wrapper-component';
+import Container from '../../components/container';
 import { AnimatedFAB, Divider, List } from 'react-native-paper';
 import { router } from 'expo-router';
 import Icons from 'react-native-vector-icons/Feather';
 
 import { View } from '../../components/themed';
-import { capitalize } from 'lodash';
+import { useGetBirths } from '../../api-hook/birth/query';
+import { format } from 'date-fns';
 
-export default function RabbitList() {
-  const query = useGetRabbits();
+export default function BirthList() {
+  const query = useGetBirths();
   const data = query.data ?? [];
 
   return (
     <Container>
       <AnimatedFAB
         icon={() => <Icons name="plus" size={20} />}
-        onPress={() => router.push('/rabbit/create')}
+        onPress={() => router.push('/birth/create')}
         extended={false}
-        label="Create Rabbit"
+        label="Create Birth"
         style={{
           position: 'absolute',
           bottom: 16,
@@ -35,26 +36,16 @@ export default function RabbitList() {
           isLoading={query.isFetching}
           component={
             <List.Section>
-              <List.Subheader>Rabbit List</List.Subheader>
-
+              <List.Subheader>Birth List</List.Subheader>
               {data.map((item) => (
-                <View
-                  key={item.id}
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    marginLeft: 16,
-                  }}
-                >
-                  <Icons name={item.isActive ? 'check' : 'x'} size={20} />
+                <View key={item.id}>
                   <List.Item
-                    title={[
-                      item.name,
-                      item.type.name,
-                      capitalize(item.gender),
-                    ].join(' - ')}
                     key={item.id}
-                    onPress={() => router.push(`/rabbit/${item.id}`)}
+                    onPress={() => router.push(`/birth/${item.id}`)}
+                    title={[
+                      item.rabbit.name,
+                      format(item.birthAt, 'dd MMM yyyy'),
+                    ].join(' - ')}
                   />
                   <Divider />
                 </View>

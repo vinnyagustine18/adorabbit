@@ -19,7 +19,7 @@ import { getSubmitData } from './utils';
 
 export default function HealthCreate() {
   const { user, isLoading } = useGetAuthAction();
-  const userId = user?.uid;
+  const userId = user?.id;
 
   const onSubmit = React.useCallback(
     async (values: HealthFormType, form: HealthFormMethod) => {

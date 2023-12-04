@@ -4,9 +4,10 @@ import { ScrollView } from 'react-native';
 import useGetAuthAction from '../../hooks/use-get-auth-action';
 import { router } from 'expo-router';
 import Container from '../../components/container';
+import { UserTypeEnum } from '../../api-hook/user/model';
 
 export default function Profile() {
-  const { onSignOut } = useGetAuthAction();
+  const { onSignOut, user } = useGetAuthAction();
   return (
     <Container>
       <ScrollView>
@@ -14,23 +15,40 @@ export default function Profile() {
           <List.Subheader>User</List.Subheader>
           <List.Item title="Edit Profile" />
           <Divider />
-          <List.Subheader>Management</List.Subheader>
-          <List.Item title="Type List" onPress={() => router.push('/type/')} />
-          <List.Item
-            title="Rabbit List"
-            onPress={() => router.push('/rabbit/')}
-          />
-          <List.Item title="Mate List" onPress={() => router.push('/mate/')} />
-          <List.Item title="Drug List" onPress={() => router.push('/drug/')} />
-          <List.Item
-            title="Vacine List"
-            onPress={() => router.push('/vacine/')}
-          />
-          <List.Item
-            title="Health List"
-            onPress={() => router.push('/health/')}
-          />
-          <Divider />
+          {user?.type === UserTypeEnum.seller && (
+            <>
+              <List.Subheader>Management</List.Subheader>
+              <List.Item
+                title="Type List"
+                onPress={() => router.push('/type/')}
+              />
+              <List.Item
+                title="Rabbit List"
+                onPress={() => router.push('/rabbit/')}
+              />
+              <List.Item
+                title="Mate List"
+                onPress={() => router.push('/mate/')}
+              />
+              <List.Item
+                title="Drug List"
+                onPress={() => router.push('/drug/')}
+              />
+              <List.Item
+                title="Vacine List"
+                onPress={() => router.push('/vacine/')}
+              />
+              <List.Item
+                title="Health List"
+                onPress={() => router.push('/health/')}
+              />
+              <List.Item
+                title="Birth List"
+                onPress={() => router.push('/birth/')}
+              />
+              <Divider />
+            </>
+          )}
           <List.Item title="Logout" onPress={onSignOut} />
         </List.Section>
       </ScrollView>
