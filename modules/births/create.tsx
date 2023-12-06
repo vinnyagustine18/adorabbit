@@ -9,23 +9,20 @@ import useGetAuthAction from '../../hooks/use-get-auth-action';
 import { nanoid } from 'nanoid';
 
 import { Text } from 'react-native-paper';
-import { UserModel } from '../../api-hook/user/model';
+
 import { queryClient } from '../../constants/query-client';
 
 import BirthForm from './components/form';
 import { birthKey } from '../../api-hook/birth/query';
 
 export default function BirthCreate() {
-  const { user, isLoading } = useGetAuthAction();
-  const userId = user?.id;
+  const { user: currentUser, isLoading } = useGetAuthAction();
 
   const onSubmit = React.useCallback(
     async (values: BirthFormType, form: BirthFormMethod) => {
       const { mateId, rabbitId, ...rest } = values;
 
-      const { password, ...user } = (
-        await firestore().doc(`users/${userId}`).get()
-      ).data() as UserModel;
+      const { password, ...user } = currentUser!;
 
       const rabbit = (
         await firestore().doc(`rabbits/${rabbitId}`).get()
@@ -44,7 +41,7 @@ export default function BirthCreate() {
       router.back();
       return result;
     },
-    [userId],
+    [currentUser],
   );
 
   return (

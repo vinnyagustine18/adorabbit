@@ -17,20 +17,20 @@ export default function HealthShow() {
   const params = useLocalSearchParams();
   const { id } = params as any;
 
-  const { user, isLoading } = useGetAuthAction();
-  const userId = user?.id;
+  const { user: currentUser, isLoading } = useGetAuthAction();
 
   const query = useGetHealth(id);
   const health = query.data;
 
   const onSubmit = React.useCallback(
     async (values: HealthFormType, form: HealthFormMethod) => {
-      const health = await getSubmitData(values, userId!);
+      const health = await getSubmitData(values);
 
+      const { password, ...user } = currentUser!;
       const result = await firestore()
         .collection('healths')
         .doc(id)
-        .update(health);
+        .update({ ...health, user });
 
       queryClient.refetchQueries({ queryKey: healthKey.list() });
       queryClient.refetchQueries({ queryKey: healthKey.detail(id) });
@@ -40,7 +40,7 @@ export default function HealthShow() {
 
       return result;
     },
-    [id, userId],
+    [currentUser, id],
   );
 
   return (

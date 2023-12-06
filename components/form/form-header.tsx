@@ -1,4 +1,4 @@
-import { Text } from "../themed";
+import { Text } from 'react-native-paper';
 
 interface Props {
   data?: any;
@@ -10,10 +10,9 @@ export default function FormHeader(props: Props) {
   const { data, defaultLabel, editLabel } = props;
   return (
     <Text
+      variant="titleMedium"
       style={{
         marginLeft: 16,
-        fontWeight: "600",
-        fontSize: 18,
       }}
     >
       {data ? editLabel ?? defaultLabel : defaultLabel}

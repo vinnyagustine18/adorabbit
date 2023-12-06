@@ -16,18 +16,19 @@ import { mateKey } from '../../api-hook/mate/query';
 import { getSubmitData } from './utils';
 
 export default function MateCreate() {
-  const { user, isLoading } = useGetAuthAction();
-  const userId = user?.id;
+  const { user: currentUser, isLoading } = useGetAuthAction();
 
   const onSubmit = React.useCallback(
     async (values: MateFormType, form: MateFormMethod) => {
-      const mate = await getSubmitData(values, userId!);
+      const mate = await getSubmitData(values);
+
+      const { password, ...user } = currentUser!;
 
       const id = nanoid();
 
       const result = await firestore()
         .doc(`mates/${id}`)
-        .set({ ...mate, id });
+        .set({ ...mate, id, user });
 
       queryClient.refetchQueries({ queryKey: mateKey.list() });
 
@@ -35,7 +36,7 @@ export default function MateCreate() {
       router.back();
       return result;
     },
-    [userId],
+    [currentUser],
   );
 
   return (

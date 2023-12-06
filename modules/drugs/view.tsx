@@ -9,7 +9,6 @@ import Toast from '../../components/toast';
 import Container from '../../components/container';
 import useGetAuthAction from '../../hooks/use-get-auth-action';
 import { queryClient } from '../../constants/query-client';
-import { UserModel } from '../../api-hook/user/model';
 import DrugForm from './components/form';
 import { drugKey, useGetDrug } from '../../api-hook/drug/query';
 
@@ -17,17 +16,14 @@ export default function DrugShow() {
   const params = useLocalSearchParams();
   const { id } = params as any;
 
-  const { user, isLoading } = useGetAuthAction();
-  const userId = user?.id;
+  const { user: currentUser, isLoading } = useGetAuthAction();
 
   const query = useGetDrug(id);
   const drug = query.data;
 
   const onSubmit = React.useCallback(
     async (values: DrugFormType, form: DrugFormMethod) => {
-      const { password, ...user } = (
-        await firestore().doc(`users/${userId}`).get()
-      ).data() as UserModel;
+      const { password, ...user } = currentUser!;
 
       const result = await firestore()
         .collection('drugs')
@@ -45,7 +41,7 @@ export default function DrugShow() {
 
       return result;
     },
-    [id, userId],
+    [currentUser, id],
   );
 
   return (

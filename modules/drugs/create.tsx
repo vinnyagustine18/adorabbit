@@ -9,7 +9,6 @@ import useGetAuthAction from '../../hooks/use-get-auth-action';
 import { nanoid } from 'nanoid';
 
 import { Text } from 'react-native-paper';
-import { UserModel } from '../../api-hook/user/model';
 import { queryClient } from '../../constants/query-client';
 
 import { DrugFormMethod, DrugFormType } from './components/form-type';
@@ -17,14 +16,11 @@ import DrugForm from './components/form';
 import { drugKey } from '../../api-hook/drug/query';
 
 export default function DrugCreate() {
-  const { user, isLoading } = useGetAuthAction();
-  const userId = user?.id;
+  const { user: currentUser, isLoading } = useGetAuthAction();
 
   const onSubmit = React.useCallback(
     async (values: DrugFormType, form: DrugFormMethod) => {
-      const { password, ...user } = (
-        await firestore().doc(`users/${userId}`).get()
-      ).data() as UserModel;
+      const { password, ...user } = currentUser!;
 
       const id = nanoid();
 
@@ -38,7 +34,7 @@ export default function DrugCreate() {
       router.back();
       return result;
     },
-    [userId],
+    [currentUser],
   );
 
   return (

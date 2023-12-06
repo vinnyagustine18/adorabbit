@@ -16,16 +16,21 @@ export default function MateShow() {
   const params = useLocalSearchParams();
   const { id } = params as any;
 
-  const { user, isLoading } = useGetAuthAction();
-  const userId = user?.id;
+  const { user: currentUser, isLoading } = useGetAuthAction();
+
   const query = useGetMate(id);
   const mate = query.data;
 
   const onSubmit = React.useCallback(
     async (values: MateFormType, form: MateFormMethod) => {
-      const mate = await getSubmitData(values, userId!);
+      const mate = await getSubmitData(values);
 
-      const result = await firestore().collection('mates').doc(id).update(mate);
+      const { password, ...user } = currentUser!;
+
+      const result = await firestore()
+        .collection('mates')
+        .doc(id)
+        .update({ ...mate, user });
 
       queryClient.refetchQueries({ queryKey: mateKey.list() });
       queryClient.refetchQueries({ queryKey: mateKey.detail(id) });
@@ -35,7 +40,7 @@ export default function MateShow() {
 
       return result;
     },
-    [id, userId],
+    [currentUser, id],
   );
   return (
     <Container>

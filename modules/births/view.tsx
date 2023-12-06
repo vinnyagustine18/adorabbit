@@ -9,7 +9,7 @@ import Toast from '../../components/toast';
 import Container from '../../components/container';
 import useGetAuthAction from '../../hooks/use-get-auth-action';
 import { queryClient } from '../../constants/query-client';
-import { UserModel } from '../../api-hook/user/model';
+
 import { birthKey, useGetBirth } from '../../api-hook/birth/query';
 import BirthForm from './components/form';
 
@@ -17,8 +17,8 @@ export default function BirthShow() {
   const params = useLocalSearchParams();
   const { id } = params as any;
 
-  const { user, isLoading } = useGetAuthAction();
-  const userId = user?.id;
+  const { user: currentUser, isLoading } = useGetAuthAction();
+  // const userId = user?.id;
 
   const query = useGetBirth(id);
   const birth = query.data;
@@ -27,9 +27,7 @@ export default function BirthShow() {
     async (values: BirthFormType, form: BirthFormMethod) => {
       const { mateId, rabbitId, ...rest } = values;
 
-      const { password, ...user } = (
-        await firestore().doc(`users/${userId}`).get()
-      ).data() as UserModel;
+      const { password, ...user } = currentUser!;
 
       const rabbit = (
         await firestore().doc(`rabbits/${rabbitId}`).get()
@@ -54,7 +52,7 @@ export default function BirthShow() {
 
       return result;
     },
-    [id, userId],
+    [currentUser, id],
   );
 
   return (

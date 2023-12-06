@@ -17,20 +17,21 @@ export default function RabbitShow() {
   const params = useLocalSearchParams();
   const { id } = params as any;
 
-  const { user, isLoading } = useGetAuthAction();
-  const userId = user?.id;
+  const { user: currentUser, isLoading } = useGetAuthAction();
 
   const query = useGetRabbit(id);
   const rabbit = query.data;
 
   const onSubmit = React.useCallback(
     async (values: RabbitFormType, form: RabbitFormMethod) => {
-      const rabbit = await getSubmitData(values, userId!);
+      const rabbit = await getSubmitData(values);
+
+      const { password, ...user } = currentUser!;
 
       const result = await firestore()
         .collection('rabbits')
         .doc(id)
-        .update(rabbit);
+        .update({ ...rabbit, user });
 
       queryClient.refetchQueries({ queryKey: rabbitKey.list() });
       queryClient.refetchQueries({ queryKey: rabbitKey.detail(id) });
@@ -40,7 +41,7 @@ export default function RabbitShow() {
 
       return result;
     },
-    [id, userId],
+    [currentUser, id],
   );
 
   return (

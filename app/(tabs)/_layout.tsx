@@ -33,6 +33,8 @@ export default function TabLayout() {
         name="transaction"
         options={{
           title: 'Transaction',
+          headerShown: false,
+
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="file-text" color={color} />
           ),

@@ -14,18 +14,18 @@ import { rabbitKey } from '../../api-hook/rabbit/query';
 import { queryClient } from '../../constants/query-client';
 
 export default function RabbitCreate() {
-  const { user, isLoading } = useGetAuthAction();
-  const userId = user?.id;
+  const { user: currentUser, isLoading } = useGetAuthAction();
 
   const onSubmit = React.useCallback(
     async (values: RabbitFormType, form: RabbitFormMethod) => {
-      const rabbit = await getSubmitData(values, userId!);
+      const rabbit = await getSubmitData(values);
       const id = nanoid(10);
+      const { password, ...user } = currentUser!;
 
       const result = await firestore()
         .collection('rabbits')
         .doc(id)
-        .set({ ...rabbit, id });
+        .set({ ...rabbit, id, user });
 
       queryClient.refetchQueries({ queryKey: rabbitKey.list() });
 
@@ -33,7 +33,7 @@ export default function RabbitCreate() {
       router.back();
       return result;
     },
-    [userId],
+    [currentUser],
   );
 
   return (

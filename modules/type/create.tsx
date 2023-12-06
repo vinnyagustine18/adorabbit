@@ -10,19 +10,16 @@ import useGetAuthAction from '../../hooks/use-get-auth-action';
 import { nanoid } from 'nanoid';
 
 import { Text } from 'react-native-paper';
-import { UserModel } from '../../api-hook/user/model';
+
 import { queryClient } from '../../constants/query-client';
 import { typeKey } from '../../api-hook/type/query';
 
 export default function TypeCreate() {
-  const { user, isLoading } = useGetAuthAction();
-  const userId = user?.id;
+  const { user: currentUser, isLoading } = useGetAuthAction();
 
   const onSubmit = React.useCallback(
     async (values: TypeFormType, form: TypeFormMethod) => {
-      const { password, ...user } = (
-        await firestore().doc(`users/${userId}`).get()
-      ).data() as UserModel;
+      const { password, ...user } = currentUser!;
 
       const id = nanoid();
 
@@ -36,7 +33,7 @@ export default function TypeCreate() {
       router.back();
       return result;
     },
-    [userId],
+    [currentUser],
   );
 
   return (

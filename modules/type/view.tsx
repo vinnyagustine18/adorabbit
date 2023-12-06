@@ -10,23 +10,19 @@ import Toast from '../../components/toast';
 import Container from '../../components/container';
 import useGetAuthAction from '../../hooks/use-get-auth-action';
 import { queryClient } from '../../constants/query-client';
-import { UserModel } from '../../api-hook/user/model';
 
 export default function TypeShow() {
   const params = useLocalSearchParams();
   const { id } = params as any;
 
-  const { user, isLoading } = useGetAuthAction();
-  const userId = user?.id;
+  const { user: currentUser, isLoading } = useGetAuthAction();
 
   const query = useGetType(id);
   const type = query.data;
 
   const onSubmit = React.useCallback(
     async (values: TypeFormType, form: TypeFormMethod) => {
-      const { password, ...user } = (
-        await firestore().doc(`users/${userId}`).get()
-      ).data() as UserModel;
+      const { password, ...user } = currentUser!;
 
       const result = await firestore()
         .collection('types')
@@ -44,7 +40,7 @@ export default function TypeShow() {
 
       return result;
     },
-    [id, userId],
+    [currentUser, id],
   );
 
   return (

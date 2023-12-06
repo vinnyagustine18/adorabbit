@@ -4,12 +4,13 @@ import { useGetUsers } from '../../api-hook/user/query';
 import { List } from 'react-native-paper';
 
 import FetchWrapperComponent from '../../components/common/fetch-wrapper-component';
-import Container from '../../components/container';
 import { getDistance } from 'geolib';
 import useGetCurrentLocation from '../../hooks/use-get-current-location';
 import { UserTypeEnum } from '../../api-hook/user/model';
 import useGetAuthAction from '../../hooks/use-get-auth-action';
 import { router } from 'expo-router';
+import { View } from '../../components/themed';
+import colorConstant from '../../constants/color.constant';
 
 export default function TabOneScreen() {
   const query = useGetUsers();
@@ -51,7 +52,7 @@ export default function TabOneScreen() {
   ]);
 
   return (
-    <Container>
+    <View style={{ flex: 1, backgroundColor: colorConstant.white }}>
       <ScrollView>
         <FetchWrapperComponent
           empty={data.length === 0}
@@ -65,7 +66,7 @@ export default function TabOneScreen() {
                 return (
                   <List.Item
                     key={item.id}
-                    title={`${item.name} - ${item.distance}Km`}
+                    title={`${item.name} - ${item.address} - ${item.distance}Km`}
                     onPress={() => router.push(`/seller/${item.id}`)}
                   />
                 );
@@ -74,6 +75,6 @@ export default function TabOneScreen() {
           }
         />
       </ScrollView>
-    </Container>
+    </View>
   );
 }

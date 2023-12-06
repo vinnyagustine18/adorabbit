@@ -17,18 +17,18 @@ import { vacineKey } from '../../api-hook/vacine/query';
 import VacineForm from './components/form';
 
 export default function VacineCreate() {
-  const { user, isLoading } = useGetAuthAction();
-  const userId = user?.id;
+  const { user: currentUser, isLoading } = useGetAuthAction();
 
   const onSubmit = React.useCallback(
     async (values: VacineFormType, form: VacineFormMethod) => {
-      const vacine = await getSubmitData(values, userId!);
+      const vacine = await getSubmitData(values);
 
+      const { password, ...user } = currentUser!;
       const id = nanoid();
 
       const result = await firestore()
         .doc(`vacines/${id}`)
-        .set({ ...vacine, id });
+        .set({ ...vacine, id, user });
 
       queryClient.refetchQueries({ queryKey: vacineKey.list() });
 
@@ -36,7 +36,7 @@ export default function VacineCreate() {
       router.back();
       return result;
     },
-    [userId],
+    [currentUser],
   );
 
   return (

@@ -46,6 +46,10 @@ export default function Profile() {
                 title="Birth List"
                 onPress={() => router.push('/birth/')}
               />
+              <List.Item
+                title="Product Adjustment List"
+                onPress={() => router.push('/product-adjustment')}
+              />
               <Divider />
             </>
           )}

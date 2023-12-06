@@ -1,11 +1,11 @@
 export enum UserTypeEnum {
-  user = "user",
-  seller = "seller",
+  user = 'user',
+  seller = 'seller',
 }
 
 export enum GenderEnum {
-  male = "male",
-  female = "female",
+  male = 'male',
+  female = 'female',
 }
 
 export type UserModel = {

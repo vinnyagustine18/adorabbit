@@ -17,19 +17,20 @@ export default function VacineShow() {
   const params = useLocalSearchParams();
   const { id } = params as any;
 
-  const { user, isLoading } = useGetAuthAction();
-  const userId = user?.id;
+  const { user: currentUser, isLoading } = useGetAuthAction();
+
   const query = useGetVacine(id);
   const vacine = query.data;
 
   const onSubmit = React.useCallback(
     async (values: VacineFormType, form: VacineFormMethod) => {
-      const vacine = await getSubmitData(values, userId!);
+      const vacine = await getSubmitData(values);
+      const { password, ...user } = currentUser!;
 
       const result = await firestore()
         .collection('vacines')
         .doc(id)
-        .update(vacine);
+        .update({ ...vacine, user });
 
       queryClient.refetchQueries({ queryKey: vacineKey.list() });
       queryClient.refetchQueries({ queryKey: vacineKey.detail(id) });
@@ -39,7 +40,7 @@ export default function VacineShow() {
 
       return result;
     },
-    [id, userId],
+    [currentUser, id],
   );
   return (
     <Container>
