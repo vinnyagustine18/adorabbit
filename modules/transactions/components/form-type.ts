@@ -9,6 +9,8 @@ import {
   TransactionTypeEnum,
 } from '../../../api-hook/transaction/model';
 
+export type ProductType = { isCheck: boolean } & RabbitModel;
+
 export const TransactionFormSchema = () =>
   Yup.object({
     transactionAt: Yup.date().required().default(new Date()),
@@ -23,7 +25,7 @@ export const TransactionFormSchema = () =>
 export type TransactionFormType = Yup.InferType<
   ReturnType<typeof TransactionFormSchema>
 > & {
-  products: RabbitModel[];
+  products: ProductType[];
   isSales: boolean;
 };
 

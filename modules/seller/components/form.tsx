@@ -15,13 +15,13 @@ import {
 import { UserModel } from '../../../api-hook/user/model';
 import useGetAuthAction from '../../../hooks/use-get-auth-action';
 import { View } from '../../../components/themed';
-import TextInput from '../../../components/element/text-input';
 import colorConstant from '../../../constants/color.constant';
 import firestore from '@react-native-firebase/firestore';
 import { nanoid } from 'nanoid';
 import { router } from 'expo-router';
 import Toast from '../../../components/toast';
 import SellerPricePreview from './seller-price-preview';
+import SellerProductField from './seller-product-field';
 
 interface Props {
   rabbits: RabbitModel[];
@@ -103,10 +103,12 @@ export default function SellerForm(props: Props) {
           return {
             ...product,
             quantity: parseFloat(product.quantity.toString()),
+            price: parseFloat(product.price.toString()),
           };
         });
       const paymentAmount = products.reduce((prev, product) => {
-        const amount = product.quantity + product.price;
+        const amount = product.quantity * product.price;
+
         return prev + amount;
       }, 0);
       const id = nanoid();
@@ -135,6 +137,7 @@ export default function SellerForm(props: Props) {
   );
 
   const noData = collection.length === 0 && commercial.length === 0;
+
   return (
     <Form methods={methods}>
       {step === SellerStep.main ? (
@@ -161,22 +164,11 @@ export default function SellerForm(props: Props) {
               </Text>
               {collection.map((col, index) => {
                 return (
-                  <View
+                  <SellerProductField
                     key={col.id}
-                    style={{
-                      gap: 4,
-                    }}
-                  >
-                    <Text>
-                      {col.name} - {col.type.name} (Qty)
-                    </Text>
-                    <Text>Price (@) : Rp {col.price}</Text>
-                    <TextInput
-                      label="Qty"
-                      name={`products[${index}].quantity`}
-                      keyboardType="number-pad"
-                    />
-                  </View>
+                    product={col}
+                    index={index}
+                  />
                 );
               })}
             </>
@@ -193,28 +185,9 @@ export default function SellerForm(props: Props) {
                 Commercial Rabbit
               </Text>
               {commercial.map((com, index) => {
+                const idx = collection.length + index;
                 return (
-                  <View
-                    key={com.id}
-                    style={{
-                      gap: 4,
-                    }}
-                  >
-                    <Text>
-                      {com.name} - {com.type.name} (KG)
-                    </Text>
-                    <Text>Price (@) : Rp {com.price}</Text>
-                    <TextInput
-                      label={`Kg`}
-                      name={`products[${collection.length + index}].quantity`}
-                      keyboardType="number-pad"
-                    />
-                  </View>
-                  // <View key={com.id}>
-                  //   <Text>
-                  //     {com.name} - {com.type.name}
-                  //   </Text>
-                  // </View>
+                  <SellerProductField key={com.id} product={com} index={idx} />
                 );
               })}
             </>

@@ -17,7 +17,7 @@ export default function SellerView() {
 
   const queryRabbits = useGetRabbits();
   const rabbits = (queryRabbits.data ?? []).filter(
-    (rabbit) => rabbit.user.id === id && rabbit.isActive && rabbit.quantity > 0,
+    (rabbit) => rabbit.user.id === id && rabbit.isActive,
   );
 
   const seller = queryUser.data;

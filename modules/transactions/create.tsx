@@ -17,20 +17,38 @@ import { nanoid } from 'nanoid';
 
 export default function TransactionCreate() {
   const { user: currentUser, isLoading } = useGetAuthAction();
+
   const query = useGetRabbits();
-  const rabbits = query.data ?? [];
+
+  const rabbits = (query.data ?? []).filter(
+    (data) => data.user.id === currentUser?.id,
+  );
+
   const onSubmit = React.useCallback(
     async (values: TransactionFormType, form: TransactionFormMethod) => {
       const { password, ...user } = currentUser!;
       const createBy = user;
       const seller = user;
-      const { isSales, paymentAmount, paymentAt, paymentType, ...rest } =
-        values;
+      const {
+        isSales,
+        paymentAmount,
+        paymentAt,
+        paymentType,
+        products: currentProducts,
+        ...rest
+      } = values;
       const id = nanoid();
+
+      const products = currentProducts
+        .filter((prod) => prod.isCheck)
+        .map((prod) => {
+          const { isCheck, ...product } = prod;
+          return product;
+        });
 
       const result = await firestore()
         .doc(`transactions/${id}`)
-        .set({ ...rest, createBy, seller, id });
+        .set({ ...rest, products, createBy, seller, id });
 
       queryClient.refetchQueries({ queryKey: transactionKey.list() });
 

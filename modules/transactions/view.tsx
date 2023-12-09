@@ -32,7 +32,34 @@ export default function TransactionView() {
 
   const onSubmit = React.useCallback(
     async (values: TransactionFormType, form: TransactionFormMethod) => {
-      const { isSales, ...transaction } = values;
+      const {
+        isSales,
+        paymentAmount,
+        paymentAt,
+        paymentType,
+        products: currentProducts,
+        ...rest
+      } = values;
+
+      const products = currentProducts
+        .filter((prod) => prod.isCheck)
+        .map((prod) => {
+          const { isCheck, ...product } = prod;
+          return product;
+        });
+
+      const transaction = isSales
+        ? {
+            paymentAmount,
+            paymentAt,
+            paymentType,
+            products,
+            ...rest,
+          }
+        : {
+            products,
+            ...rest,
+          };
 
       const result = await firestore()
         .doc(`transactions/${id}`)

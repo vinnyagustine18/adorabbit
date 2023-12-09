@@ -19,6 +19,8 @@ import DateInput from '../../../components/element/date-input';
 import TextInput from '../../../components/element/text-input';
 import RadioInput from '../../../components/element/radio-input';
 import { UserModel, UserTypeEnum } from '../../../api-hook/user/model';
+import { Text } from 'react-native-paper';
+import TransactionProductsField from './transaction-products-field';
 
 interface Props {
   transaction?: TransactionModel;
@@ -37,16 +39,30 @@ export default function TransactionForm(props: Props) {
 
   const defaultValues = React.useMemo<TransactionFormType>(() => {
     const products = (rabbits ?? []).map((rabbit) => {
+      const product = transaction?.products?.find(
+        (product) => product.id === rabbit.id,
+      );
       return {
         ...rabbit,
-        quantity: 0,
+        quantity: product?.quantity ?? 0,
+        isCheck: !!product,
       };
     });
+
     const type = transaction?.type ?? TransactionTypeEnum.purchase;
     const status = transaction?.status ?? TransactionStatusEnum.finish;
 
     return {
-      products: transaction?.products ?? products,
+      products:
+        type === TransactionTypeEnum.purchase
+          ? products
+          : (transaction?.products ?? []).map((product) => {
+              return {
+                ...product,
+                isCheck: true,
+              };
+            }),
+
       transactionAt: transaction?.transactionAt ?? new Date(),
 
       paymentAmount: transaction?.paymentAmount ?? 0,
@@ -79,23 +95,24 @@ export default function TransactionForm(props: Props) {
   const isSales = defaultValues.isSales;
 
   const isEditable = React.useMemo(() => {
-    const status = defaultValues.status as TransactionStatusEnum;
-    if (!isUserSales) {
-      return false;
-    }
-    if (defaultValues.type === TransactionTypeEnum.purchase) {
-      return true;
-    }
-    switch (status) {
-      case TransactionStatusEnum.finish:
-      case TransactionStatusEnum.cancel:
-        return false;
-      case TransactionStatusEnum.pending:
-      case TransactionStatusEnum.active:
-      default:
-        return true;
-    }
-  }, [defaultValues.status, defaultValues.type, isUserSales]);
+    return true;
+    // const status = defaultValues.status as TransactionStatusEnum;
+    // if (!isUserSales) {
+    //   return false;
+    // }
+    // if (defaultValues.type === TransactionTypeEnum.purchase) {
+    //   return true;
+    // }
+    // switch (status) {
+    //   case TransactionStatusEnum.finish:
+    //   case TransactionStatusEnum.cancel:
+    //     return false;
+    //   case TransactionStatusEnum.pending:
+    //   case TransactionStatusEnum.active:
+    //   default:
+    //     return true;
+    // }
+  }, []);
 
   return (
     <Form methods={methods} defaultEditable={!transaction}>
@@ -122,8 +139,12 @@ export default function TransactionForm(props: Props) {
               label={isSales ? 'Transaction Date' : 'Adjustment Date'}
               disabled
             />
+            <Text variant="titleMedium">
+              {isSales ? 'Product List' : 'Rabbit List'}
+            </Text>
+            <TransactionProductsField />
             {isSales && isUserSales && (
-              <View>
+              <View style={{ marginTop: 16 }}>
                 <TextInput
                   name="paymentAmount"
                   label="Payment Amount"
