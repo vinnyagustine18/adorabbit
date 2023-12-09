@@ -60,7 +60,7 @@ export default function TransactionProductsField() {
   return (
     <React.Fragment>
       {products.map((product, index) => {
-        if (product.isActive || editable) {
+        if (product.isCheck || editable) {
           return <TransactionProductField key={product.id} index={index} />;
         }
         return <React.Fragment key={product.id} />;
