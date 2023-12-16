@@ -11,14 +11,16 @@ import { View } from '../../../components/themed';
 import FormFooter from '../../../components/form/form-footer';
 import FormHeader from '../../../components/form/form-header';
 import { DrugModel } from '../../../api-hook/drug/model';
+import { UserModel } from '../../../api-hook/user/model';
 
 interface Props {
   drug?: DrugModel;
   onSubmit: (values: DrugFormType, form: DrugFormMethod) => Promise<any>;
+  user: UserModel;
 }
 
 export default function TypeForm(props: Props) {
-  const { drug } = props;
+  const { drug, user } = props;
   const defaultValues = React.useMemo<DrugFormType>(() => {
     return {
       dose: drug?.dose ?? '',
@@ -45,6 +47,8 @@ export default function TypeForm(props: Props) {
     [methods, props],
   );
 
+  const isContribute = !drug || drug?.user?.id === user.id;
+
   return (
     <Container>
       <Form methods={methods} defaultEditable={!drug}>
@@ -62,7 +66,7 @@ export default function TypeForm(props: Props) {
           <TextInput name="type" placeholder="Fill the name" label="Type" />
           <TextInput name="dose" placeholder="Fill the dose" label="Dose" />
         </View>
-        <FormFooter onSubmit={onSubmit} data={drug} />
+        {isContribute && <FormFooter onSubmit={onSubmit} data={drug} />}
       </Form>
     </Container>
   );

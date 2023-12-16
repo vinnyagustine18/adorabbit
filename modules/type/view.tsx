@@ -50,7 +50,9 @@ export default function TypeShow() {
         error={query.error?.message}
         isLoading={query.isFetching || isLoading}
         loadingComponent={<ActivityIndicator />}
-        component={<TypeForm type={type} onSubmit={onSubmit} />}
+        component={
+          <TypeForm user={currentUser} type={type} onSubmit={onSubmit} />
+        }
       />
     </Container>
   );

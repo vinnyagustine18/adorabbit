@@ -6,10 +6,12 @@ import { View } from '../../components/themed';
 import { router } from 'expo-router';
 import Icons from 'react-native-vector-icons/Feather';
 import Container from '../../components/container';
+import useGetAuthAction from '../../hooks/use-get-auth-action';
 
 export default function MateList() {
+  const { user, isLoading } = useGetAuthAction();
   const query = useGetMates();
-  const data = query.data ?? [];
+  const data = (query.data ?? []).filter((mate) => mate.user.id === user.id);
   return (
     <Container>
       <AnimatedFAB
@@ -29,7 +31,7 @@ export default function MateList() {
           empty={data.length === 0}
           onRetry={query.refetch}
           error={query.error?.message}
-          isLoading={query.isFetching}
+          isLoading={query.isFetching || isLoading}
           component={
             <List.Section>
               <List.Subheader>Mate List</List.Subheader>

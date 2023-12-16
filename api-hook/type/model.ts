@@ -1,8 +1,10 @@
+import { UserModel } from '../user/model';
+
 export type TypeModel = {
   id: string;
   name: string;
 
-  userId: string;
+  user: UserModel;
 
   key: string;
 };

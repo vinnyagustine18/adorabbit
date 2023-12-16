@@ -39,7 +39,11 @@ export default function DrugCreate() {
 
   return (
     <Container>
-      {isLoading ? <Text>Loading ...</Text> : <DrugForm onSubmit={onSubmit} />}
+      {isLoading ? (
+        <Text>Loading ...</Text>
+      ) : (
+        <DrugForm user={currentUser} onSubmit={onSubmit} />
+      )}
     </Container>
   );
 }

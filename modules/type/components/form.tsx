@@ -10,14 +10,16 @@ import Toast from '../../../components/toast';
 import { View } from '../../../components/themed';
 import FormFooter from '../../../components/form/form-footer';
 import FormHeader from '../../../components/form/form-header';
+import { UserModel } from '../../../api-hook/user/model';
 
 interface Props {
   type?: TypeModel;
+  user: UserModel;
   onSubmit: (values: TypeFormType, form: TypeFormMethod) => Promise<any>;
 }
 
 export default function TypeForm(props: Props) {
-  const { type } = props;
+  const { type, user } = props;
   const defaultValues = React.useMemo<TypeFormType>(() => {
     return {
       name: type?.name ?? '',
@@ -43,6 +45,7 @@ export default function TypeForm(props: Props) {
     [methods, props],
   );
 
+  const isContribute = !type || user.id === type?.user?.id;
   return (
     <Container>
       <Form methods={methods} defaultEditable={!type}>
@@ -59,7 +62,7 @@ export default function TypeForm(props: Props) {
         >
           <TextInput name="name" placeholder="Fill the name" label="Name" />
         </View>
-        <FormFooter onSubmit={onSubmit} data={type} />
+        {isContribute && <FormFooter onSubmit={onSubmit} data={type} />}
       </Form>
     </Container>
   );

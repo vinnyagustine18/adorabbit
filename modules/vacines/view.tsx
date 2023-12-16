@@ -49,7 +49,9 @@ export default function VacineShow() {
         error={query.error?.message}
         isLoading={query.isFetching || isLoading}
         loadingComponent={<ActivityIndicator />}
-        component={<VacineForm vacine={vacine} onSubmit={onSubmit} />}
+        component={
+          <VacineForm user={currentUser} vacine={vacine} onSubmit={onSubmit} />
+        }
       />
     </Container>
   );

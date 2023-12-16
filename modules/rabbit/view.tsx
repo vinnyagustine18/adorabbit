@@ -51,7 +51,9 @@ export default function RabbitShow() {
         error={query.error?.message}
         isLoading={query.isFetching || isLoading}
         loadingComponent={<ActivityIndicator />}
-        component={<RabbitForm rabbit={rabbit} onSubmit={onSubmit} />}
+        component={
+          <RabbitForm user={currentUser} rabbit={rabbit} onSubmit={onSubmit} />
+        }
       />
     </Container>
   );

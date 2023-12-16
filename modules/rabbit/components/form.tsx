@@ -10,7 +10,7 @@ import {
   RabbitFormSchema,
   RabbitFormType,
 } from './form-type';
-import { GenderEnum } from '../../../api-hook/user/model';
+import { GenderEnum, UserModel } from '../../../api-hook/user/model';
 import useYupValidationResolver from '../../../hooks/use-yup-validation-resolver';
 import { useForm } from 'react-hook-form';
 import Toast from '../../../components/toast';
@@ -28,10 +28,11 @@ import CheckboxInput from '../../../components/element/checkbox-input';
 interface Props {
   rabbit?: RabbitModel;
   onSubmit: (values: RabbitFormType, form: RabbitFormMethod) => Promise<any>;
+  user: UserModel;
 }
 
 export default function RabbitForm(props: Props) {
-  const { rabbit } = props;
+  const { rabbit, user } = props;
   const defaultValues = React.useMemo<RabbitFormType>(() => {
     return {
       birthAt: rabbit?.birthAt ?? new Date(),
@@ -66,6 +67,8 @@ export default function RabbitForm(props: Props) {
     },
     [methods, props],
   );
+
+  const isContribute = !rabbit || rabbit?.user?.id === user.id;
 
   return (
     <Form methods={methods} defaultEditable={!rabbit}>
@@ -165,7 +168,7 @@ export default function RabbitForm(props: Props) {
             />
           </View>
         </ScrollView>
-        <FormFooter onSubmit={onSubmit} data={rabbit} />
+        {isContribute && <FormFooter onSubmit={onSubmit} data={rabbit} />}
       </Container>
     </Form>
   );

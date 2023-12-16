@@ -9,10 +9,12 @@ import Icons from 'react-native-vector-icons/Feather';
 import { View } from '../../components/themed';
 import { useGetBirths } from '../../api-hook/birth/query';
 import { format } from 'date-fns';
+import useGetAuthAction from '../../hooks/use-get-auth-action';
 
 export default function BirthList() {
+  const { user, isLoading } = useGetAuthAction();
   const query = useGetBirths();
-  const data = query.data ?? [];
+  const data = (query.data ?? []).filter((birth) => birth.user.id === user.id);
 
   return (
     <Container>
@@ -33,7 +35,7 @@ export default function BirthList() {
           empty={data.length === 0}
           onRetry={query.refetch}
           error={query.error?.message}
-          isLoading={query.isFetching}
+          isLoading={query.isFetching || isLoading}
           component={
             <List.Section>
               <List.Subheader>Birth List</List.Subheader>

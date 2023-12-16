@@ -18,14 +18,16 @@ import RabbitSelectInput from '../../rabbit/components/rabbit-select-input';
 import { ScrollView } from 'react-native';
 import { VacineModel } from '../../../api-hook/vacine/model';
 import DrugSelectInput from '../../drugs/components/drug-select-input';
+import { UserModel } from '../../../api-hook/user/model';
 
 interface Props {
   vacine?: VacineModel;
   onSubmit: (values: VacineFormType, form: VacineFormMethod) => Promise<any>;
+  user: UserModel;
 }
 
 export default function VacineForm(props: Props) {
-  const { vacine } = props;
+  const { vacine, user } = props;
 
   const defaultValues = React.useMemo<VacineFormType>(() => {
     return {
@@ -54,6 +56,8 @@ export default function VacineForm(props: Props) {
     [methods, props],
   );
 
+  const isContribute = !vacine || vacine?.user?.id === user.id;
+
   return (
     <Form methods={methods} defaultEditable={!vacine}>
       <Container>
@@ -78,7 +82,7 @@ export default function VacineForm(props: Props) {
             <DrugSelectInput name="drugId" label="Drug" />
           </View>
         </ScrollView>
-        <FormFooter onSubmit={onSubmit} data={vacine} />
+        {isContribute && <FormFooter onSubmit={onSubmit} data={vacine} />}
       </Container>
     </Form>
   );

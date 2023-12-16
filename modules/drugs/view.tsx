@@ -51,7 +51,9 @@ export default function DrugShow() {
         error={query.error?.message}
         isLoading={query.isFetching || isLoading}
         loadingComponent={<ActivityIndicator />}
-        component={<DrugForm drug={drug} onSubmit={onSubmit} />}
+        component={
+          <DrugForm user={currentUser} drug={drug} onSubmit={onSubmit} />
+        }
       />
     </Container>
   );

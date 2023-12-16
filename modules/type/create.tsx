@@ -38,7 +38,11 @@ export default function TypeCreate() {
 
   return (
     <Container>
-      {isLoading ? <Text>Loading ...</Text> : <TypeForm onSubmit={onSubmit} />}
+      {isLoading ? (
+        <Text>Loading ...</Text>
+      ) : (
+        <TypeForm user={currentUser} onSubmit={onSubmit} />
+      )}
     </Container>
   );
 }

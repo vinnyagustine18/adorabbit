@@ -41,7 +41,7 @@ export default function RabbitCreate() {
       {isLoading ? (
         <Text>Loading ...</Text>
       ) : (
-        <RabbitForm onSubmit={onSubmit} />
+        <RabbitForm user={currentUser} onSubmit={onSubmit} />
       )}
     </Container>
   );

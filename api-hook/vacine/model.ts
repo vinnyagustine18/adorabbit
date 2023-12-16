@@ -1,5 +1,6 @@
-import { DrugModel } from "../drug/model";
-import { RabbitModel } from "../rabbit/model";
+import { DrugModel } from '../drug/model';
+import { RabbitModel } from '../rabbit/model';
+import { UserModel } from '../user/model';
 
 export type VacineModel = {
   id: string;
@@ -8,5 +9,5 @@ export type VacineModel = {
   drug: DrugModel;
   rabbit: RabbitModel;
 
-  userId: string;
+  user: UserModel;
 };

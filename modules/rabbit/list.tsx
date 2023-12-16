@@ -8,10 +8,14 @@ import Icons from 'react-native-vector-icons/Feather';
 
 import { View } from '../../components/themed';
 import { capitalize } from 'lodash';
+import useGetAuthAction from '../../hooks/use-get-auth-action';
 
 export default function RabbitList() {
+  const { user, isLoading } = useGetAuthAction();
   const query = useGetRabbits();
-  const data = query.data ?? [];
+  const data = (query.data ?? []).filter(
+    (rabbit) => rabbit.user.id === user?.id,
+  );
 
   return (
     <Container>
@@ -32,7 +36,7 @@ export default function RabbitList() {
           empty={data.length === 0}
           onRetry={query.refetch}
           error={query.error?.message}
-          isLoading={query.isFetching}
+          isLoading={query.isFetching || isLoading}
           component={
             <List.Section>
               <List.Subheader>Rabbit List</List.Subheader>

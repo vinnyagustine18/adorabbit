@@ -5,6 +5,7 @@ import Select, {
 
 import { useGetRabbits } from '../../../api-hook/rabbit/query';
 import { GenderEnum } from '../../../api-hook/user/model';
+import useGetAuthAction from '../../../hooks/use-get-auth-action';
 
 export interface Props extends CustomSelectInputProps {
   gender?: 'both' | GenderEnum;
@@ -12,8 +13,11 @@ export interface Props extends CustomSelectInputProps {
 
 export default function RabbitSelectInput(props: Props) {
   const { disabled, gender = 'both', ...rest } = props;
+  const { user, isLoading } = useGetAuthAction();
   const query = useGetRabbits();
-  const data = query.data ?? [];
+  const data = (query.data ?? []).filter(
+    (rabbit) => rabbit.user.id === user.id,
+  );
 
   const list: ListType[] = data
     .map((item) => {
@@ -25,7 +29,7 @@ export default function RabbitSelectInput(props: Props) {
     })
     .filter((item) => gender === 'both' || item.extra.gender === gender);
 
-  const _disabled = disabled || query.isFetching;
+  const _disabled = disabled || query.isFetching || isLoading;
 
   return (
     <Select

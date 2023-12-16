@@ -44,7 +44,7 @@ export default function VacineCreate() {
       {isLoading ? (
         <Text>Loading ...</Text>
       ) : (
-        <VacineForm onSubmit={onSubmit} />
+        <VacineForm user={currentUser} onSubmit={onSubmit} />
       )}
     </Container>
   );
