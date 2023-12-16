@@ -15,6 +15,8 @@ import useGetCurrentLocation from '../../hooks/use-get-current-location';
 import useGetAuthAction from '../../hooks/use-get-auth-action';
 import { Button, Text } from 'react-native-paper';
 import colorConstant from '../../constants/color.constant';
+import { router } from 'expo-router';
+import AddressComponent from '../../components/address-component';
 
 enum RegisterStepEnum {
   email = 'email',
@@ -24,7 +26,9 @@ enum RegisterStepEnum {
 export default function RegisterForm() {
   const { location } = useGetCurrentLocation();
   const { onCreateUser } = useGetAuthAction();
-  const [step] = React.useState<RegisterStepEnum>(RegisterStepEnum.email);
+  const [step, setStep] = React.useState<RegisterStepEnum>(
+    RegisterStepEnum.email,
+  );
   const defaultValues = React.useMemo<RegisterFormType>(() => {
     return {
       email: '',
@@ -95,8 +99,6 @@ export default function RegisterForm() {
   const compoenents = React.useCallback(() => {
     switch (step) {
       case RegisterStepEnum.email:
-      case RegisterStepEnum.address:
-      default:
         return (
           <>
             <TextInput name="name" label="Full Name" placeholder="fill name" />
@@ -115,16 +117,9 @@ export default function RegisterForm() {
               name="address"
               placeholder="fill the address"
               label="Address"
-            />
-            <TextInput
-              name="latitude"
-              placeholder="fill the latitude"
-              label="Latitude"
-            />
-            <TextInput
-              name="longitude"
-              placeholder="fill the longitude"
-              label="Longitude"
+              onPressIn={() => {
+                setStep(RegisterStepEnum.address);
+              }}
             />
             <TextInput
               name="password"
@@ -154,6 +149,18 @@ export default function RegisterForm() {
             />
           </>
         );
+      case RegisterStepEnum.address:
+      default:
+        return (
+          <AddressComponent
+            onSubmit={(value) => {
+              methods.setValue('address', value.address);
+              methods.setValue('latitude', value.latitude);
+              methods.setValue('longitude', value.longitude);
+              setStep(RegisterStepEnum.email);
+            }}
+          />
+        );
       // return (
       //   <AddressComponent
       //     onChange={(values) => {
@@ -169,8 +176,9 @@ export default function RegisterForm() {
       //   />
       // );
     }
-  }, [step]);
+  }, [methods, step]);
 
+  const isMainPage = step === RegisterStepEnum.email;
   return (
     <Container
       style={{
@@ -181,13 +189,15 @@ export default function RegisterForm() {
       }}
     >
       <Form methods={methods}>
-        <Text
-          variant="headlineMedium"
-          style={{ textAlign: 'center', fontWeight: '600', marginBottom: 16 }}
-        >
-          {title}
-        </Text>
-        {step === RegisterStepEnum.email ? (
+        {isMainPage && (
+          <Text
+            variant="headlineMedium"
+            style={{ textAlign: 'center', fontWeight: '600', marginBottom: 16 }}
+          >
+            {title}
+          </Text>
+        )}
+        {isMainPage ? (
           <ScrollView
             overScrollMode="always"
             style={{
@@ -200,40 +210,42 @@ export default function RegisterForm() {
           compoenents()
         )}
 
-        <View
-          style={{
-            position: step === RegisterStepEnum.address ? 'absolute' : 'static',
-            bottom: 16,
-            flex: 1,
-            width: '100%',
-            backgroundColor: 'transparent',
-            flexDirection: 'row',
-            marginTop: 24,
-          }}
-        >
-          {!!back && (
-            <Button
-              style={{ flex: 1, marginHorizontal: 16 }}
-              onPress={onClickBack}
-              buttonColor={colorConstant.redDefault}
-              textColor={colorConstant.white}
-            >
-              {back}
-            </Button>
-          )}
-          <Button
-            style={{ flex: 1 }}
-            onPress={onClickNext}
-            loading={methods.formState.isSubmitting}
-            disabled={
-              !isEmpty(methods.formState.errors) ||
-              methods.formState.isSubmitting
-            }
-            mode="contained"
+        {isMainPage && (
+          <View
+            style={{
+              position: 'absolute',
+              bottom: 16,
+              flex: 1,
+              width: '100%',
+              backgroundColor: 'transparent',
+              flexDirection: 'row',
+              marginTop: 24,
+            }}
           >
-            {next}
-          </Button>
-        </View>
+            {!!back && (
+              <Button
+                style={{ flex: 1, marginHorizontal: 16 }}
+                onPress={onClickBack}
+                buttonColor={colorConstant.redDefault}
+                textColor={colorConstant.white}
+              >
+                {back}
+              </Button>
+            )}
+            <Button
+              style={{ flex: 1 }}
+              onPress={onClickNext}
+              loading={methods.formState.isSubmitting}
+              disabled={
+                !isEmpty(methods.formState.errors) ||
+                methods.formState.isSubmitting
+              }
+              mode="contained"
+            >
+              {next}
+            </Button>
+          </View>
+        )}
       </Form>
     </Container>
   );

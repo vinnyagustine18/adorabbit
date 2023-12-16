@@ -1,7 +1,7 @@
 import { ScrollView } from 'react-native';
 import React from 'react';
 import { useGetUsers } from '../../api-hook/user/query';
-import { List } from 'react-native-paper';
+import { Button, List } from 'react-native-paper';
 
 import FetchWrapperComponent from '../../components/common/fetch-wrapper-component';
 import { getDistance } from 'geolib';
@@ -74,6 +74,13 @@ export default function TabOneScreen() {
             </List.Section>
           }
         />
+        <Button
+          onPress={() => {
+            router.push('/address-map');
+          }}
+        >
+          address
+        </Button>
       </ScrollView>
     </View>
   );

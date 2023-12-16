@@ -2,8 +2,9 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { GooglePlacesAutocompleteRef } from 'react-native-google-places-autocomplete';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import { Region } from '../app/address-map';
+
 import Toast from './toast';
+import { Region } from './address-component';
 
 interface Props {
   region: Region;
@@ -38,6 +39,7 @@ const Map = (props: Props) => {
         `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude}%2C${longitude}&location_type=ROOFTOP%7CRANGE_INTERPOLATED%7CGEOMETRIC_CENTER&key=AIzaSyCEjmASHmwsueyVcBTftVvErllIA2sllNg`,
         // `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude}%2C${longitude}&rankby=distance&type=establishment&key=${Config.googleApiKey}`,
       );
+
       const data = await response.json();
 
       // Filter plus code workaround
@@ -60,6 +62,8 @@ const Map = (props: Props) => {
     }
   };
 
+  console.log(region);
+
   return (
     <View style={styles.container}>
       <MapView
@@ -69,11 +73,10 @@ const Map = (props: Props) => {
         region={region}
         mapPadding={{
           top: 0,
-          bottom: 44 * 16,
+          bottom: 0,
           left: 0,
           right: 0,
         }}
-
         // onRegionChange={region => {
         //   // console.log('ON REGION CHANGE', region);
         //   // setRegion(region);
@@ -81,13 +84,6 @@ const Map = (props: Props) => {
         // onRegionChangeComplete={region => {
         //   console.log('ON REGION CHANGE COMPLETE', region);
         // }}
-        // onRegionChangeComplete={currentRegion =>
-        //   setRegion({
-        //     latitude: currentRegion.latitude,
-        //     longitude: currentRegion.longitude,
-        //     coordinates: region.coordinates,
-        //   })
-        // }
         //TODO: check for android
         // mapType="mutedStandard"
       >
