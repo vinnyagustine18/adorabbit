@@ -14,6 +14,8 @@ interface Props {
   isDraggable?: boolean;
 }
 
+const API_KEY = 'AIzaSyAOVYRIgupAurZup5y1PRh8Ismb1A3lLao';
+
 const Map = (props: Props) => {
   const {
     region,
@@ -36,7 +38,7 @@ const Map = (props: Props) => {
     try {
       const response = await fetch(
         // `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude}%2C${longitude}&location_type=ROOFTOP&key=${Config.googleApiKey}`,
-        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude}%2C${longitude}&location_type=ROOFTOP%7CRANGE_INTERPOLATED%7CGEOMETRIC_CENTER&key=AIzaSyCEjmASHmwsueyVcBTftVvErllIA2sllNg`,
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude}%2C${longitude}&location_type=ROOFTOP%7CRANGE_INTERPOLATED%7CGEOMETRIC_CENTER&key=${API_KEY}`,
         // `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude}%2C${longitude}&rankby=distance&type=establishment&key=${Config.googleApiKey}`,
       );
 

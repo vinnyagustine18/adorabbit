@@ -15,7 +15,6 @@ import useGetCurrentLocation from '../../hooks/use-get-current-location';
 import useGetAuthAction from '../../hooks/use-get-auth-action';
 import { Button, Text } from 'react-native-paper';
 import colorConstant from '../../constants/color.constant';
-import { router } from 'expo-router';
 import AddressComponent from '../../components/address-component';
 
 enum RegisterStepEnum {
@@ -29,6 +28,8 @@ export default function RegisterForm() {
   const [step, setStep] = React.useState<RegisterStepEnum>(
     RegisterStepEnum.email,
   );
+
+  const [isInitiate, setIsInitiate] = React.useState(false);
   const defaultValues = React.useMemo<RegisterFormType>(() => {
     return {
       email: '',
@@ -39,7 +40,7 @@ export default function RegisterForm() {
       phoneNumber: '',
       type: UserTypeEnum.user,
       //
-      address: 'Universitas Sumatera Utara',
+      address: '',
       latitude: location?.coords?.latitude ?? 3.566854,
       longitude: location?.coords?.longitude ?? 98.659142,
     };
@@ -69,31 +70,6 @@ export default function RegisterForm() {
       },
       onClickBack: () => {},
     };
-    // switch (step) {
-    //   case RegisterStepEnum.email:
-    //     return {
-    //       title: "First Step",
-    //       back: "",
-    //       next: "Next",
-    //       onClickNext: () => {
-    //         trigger(["email", "password", "passwordConfirmation"]);
-    //         setStep(RegisterStepEnum.address);
-    //       },
-    //       onClickBack: () => {},
-    //     };
-    //   case RegisterStepEnum.address:
-    //     return {
-    //       title: "Final Step",
-    //       back: "Back",
-    //       next: "Save",
-    //       onClickNext: () => {
-    //         methods.handleSubmit(onSubmit as any)();
-    //       },
-    //       onClickBack: () => {
-    //         setStep(RegisterStepEnum.email);
-    //       },
-    //     };
-    // }
   }, [methods, onSubmit]);
 
   const compoenents = React.useCallback(() => {
@@ -179,6 +155,15 @@ export default function RegisterForm() {
   }, [methods, step]);
 
   const isMainPage = step === RegisterStepEnum.email;
+
+  React.useEffect(() => {
+    if (!isInitiate && !!location?.coords) {
+      methods.setValue('latitude', location.coords.latitude);
+      methods.setValue('longitude', location.coords.longitude);
+      setIsInitiate(true);
+    }
+  }, [isInitiate, location?.coords, methods]);
+
   return (
     <Container
       style={{
@@ -213,10 +198,7 @@ export default function RegisterForm() {
         {isMainPage && (
           <View
             style={{
-              position: 'absolute',
               bottom: 16,
-              flex: 1,
-              width: '100%',
               backgroundColor: 'transparent',
               flexDirection: 'row',
               marginTop: 24,

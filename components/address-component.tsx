@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  Alert,
-  PermissionsAndroid,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { PermissionsAndroid, StyleSheet, Text, View } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import {
   GooglePlacesAutocomplete,
@@ -14,7 +8,7 @@ import {
 
 import Map from '../components/map';
 import { Button } from 'react-native-paper';
-import { router } from 'expo-router';
+
 import Container from '../components/container';
 import LoadingViewOverlay from '../components/loading-view-overlay';
 import Toast from '../components/toast';
@@ -48,6 +42,8 @@ interface Props {
 
 navigator.geolocation = require('react-native-geolocation-service');
 
+const API_KEY = 'AIzaSyAOVYRIgupAurZup5y1PRh8Ismb1A3lLao' as const;
+
 export default function AddressComponent(props: Props) {
   const { location } = useGetCurrentLocation();
 
@@ -60,47 +56,18 @@ export default function AddressComponent(props: Props) {
   const [firstInit, setFirstInit] = useStateIfMounted(true);
   const [loadingNearbyPlace, setLoadingNearbyPlace] = useStateIfMounted(false);
   const [predefinedPlaces, setPredefinedPlaces] = useStateIfMounted<any[]>([]);
-  // const [isShowListView, setIsShowListView] = useStateIfMounted(false);
 
   const [region, setRegion] = useStateIfMounted<Region>({
     latitude: location?.coords.latitude ?? -6.121435,
     longitude: location?.coords.longitude ?? 106.774124,
     latitudeDelta: 0.005,
     longitudeDelta: 0.005,
-    // latitudeDelta: 0.0922,
-    // longitudeDelta: 0.0421,
   });
-
-  // const initialValues = React.useMemo(() => {
-  //   return {};
-  // }, []);
-
-  // const YupSchema = React.useMemo(
-  //   () =>
-  //     Yup.object().shape({
-  //       label: Yup.string().nullable(),
-  //     }),
-  //   [],
-  // );
-
-  // const formik = useFormik<AddressMapFormType>({
-  //   initialValues,
-  //   validateOnMount: true,
-  //   validationSchema: YupSchema,
-  //   onSubmit: async (values, { setSubmitting }) => {
-  //     try {
-  //     } catch (e: any) {
-  //       e.message && Toast.error(e.message);
-  //     } finally {
-  //       setSubmitting(false);
-  //     }
-  //   },
-  // });
 
   const searchNearbyPlaces = async (latitude: number, longitude: number) => {
     try {
       const response = await fetch(
-        `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude}%2C${longitude}&rankby=distance&type=establishment&key=AIzaSyCEjmASHmwsueyVcBTftVvErllIA2sllNg`,
+        `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude}%2C${longitude}&rankby=distance&type=establishment&key=${API_KEY}`,
       );
       const data = await response.json();
       return data;
@@ -152,13 +119,16 @@ export default function AddressComponent(props: Props) {
             setLoadingNearbyPlace(false);
           },
           (error) => {
-            Alert.alert(error.message.toString());
+            Toast.error(error.message.toString());
           },
           {
             showLocationDialog: true,
-            enableHighAccuracy: true,
+            enableHighAccuracy: false,
             timeout: 20000,
             maximumAge: 0,
+            accuracy: {
+              android: 'low',
+            },
           },
         );
       }
@@ -244,7 +214,7 @@ export default function AddressComponent(props: Props) {
         }}
         minLength={2}
         query={{
-          key: 'AIzaSyCEjmASHmwsueyVcBTftVvErllIA2sllNg',
+          key: API_KEY,
           language: 'id',
           components: 'country:id',
           type: 'establishment',
@@ -304,7 +274,6 @@ const styles = StyleSheet.create({
     padding: sizeConstant.contentPad / 2,
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
-    // backgroundColor: colorConstant.white,
   },
 
   textInputContainer: {

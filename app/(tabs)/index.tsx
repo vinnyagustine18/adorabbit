@@ -1,7 +1,7 @@
 import { ScrollView } from 'react-native';
 import React from 'react';
 import { useGetUsers } from '../../api-hook/user/query';
-import { Button, List } from 'react-native-paper';
+import { List, Text } from 'react-native-paper';
 
 import FetchWrapperComponent from '../../components/common/fetch-wrapper-component';
 import { getDistance } from 'geolib';
@@ -11,6 +11,7 @@ import useGetAuthAction from '../../hooks/use-get-auth-action';
 import { router } from 'expo-router';
 import { View } from '../../components/themed';
 import colorConstant from '../../constants/color.constant';
+import Icon from 'react-native-vector-icons/Fontisto';
 
 export default function TabOneScreen() {
   const query = useGetUsers();
@@ -61,12 +62,19 @@ export default function TabOneScreen() {
           onRetry={query.refetch}
           component={
             <List.Section>
-              <List.Subheader>Seller</List.Subheader>
+              <List.Subheader>
+                <View
+                  style={{ flexDirection: 'row', gap: 8, alignItems: 'center' }}
+                >
+                  <Icon name="persons" size={24} />
+                  <Text>Seller</Text>
+                </View>
+              </List.Subheader>
               {_data.map((item) => {
                 return (
                   <List.Item
                     key={item.id}
-                    title={`${item.name} - ${item.address} - ${item.distance}Km`}
+                    title={`${item.name} - ${item.distance}Km`}
                     onPress={() => router.push(`/seller/${item.id}`)}
                   />
                 );
@@ -74,13 +82,6 @@ export default function TabOneScreen() {
             </List.Section>
           }
         />
-        <Button
-          onPress={() => {
-            router.push('/address-map');
-          }}
-        >
-          address
-        </Button>
       </ScrollView>
     </View>
   );

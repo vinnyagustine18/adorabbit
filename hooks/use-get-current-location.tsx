@@ -1,6 +1,7 @@
-import React from "react";
-import Geolocation from "react-native-geolocation-service";
-import { PermissionsAndroid } from "react-native";
+import React from 'react';
+import Geolocation from 'react-native-geolocation-service';
+import { PermissionsAndroid } from 'react-native';
+import Toast from '../components/toast';
 
 export default function useGetCurrentLocation() {
   const [location, setLocation] =
@@ -10,29 +11,32 @@ export default function useGetCurrentLocation() {
       const status = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
         {
-          title: "Geolocation Permission",
-          message: "Can we access your location?",
-          buttonNeutral: "Ask Me Later",
-          buttonNegative: "Cancel",
-          buttonPositive: "OK",
-        }
+          title: 'Geolocation Permission',
+          message: 'Can we access your location?',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
       );
 
-      // const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status === 'denied') return;
 
-      if (status === "denied") return;
-      // switch (status) {
-      //   case Location.PermissionStatus.DENIED:
-      //     return;ackage
-      // }
-      // const { coords, timestamp, mocked } =
-      //   await Location.getCurrentPositionAsync({
-      //     accuracy: Location.Accuracy.Highest,
-      //   });
-
-      Geolocation.getCurrentPosition((location) => {
-        setLocation(location);
-      });
+      Geolocation.getCurrentPosition(
+        (location) => {
+          console.log(location);
+          setLocation(location);
+        },
+        (error) => {
+          Toast.error(error.message);
+        },
+        {
+          enableHighAccuracy: false,
+          accuracy: {
+            android: 'low',
+            ios: 'reduced',
+          },
+        },
+      );
     };
 
     location === null && exec();

@@ -143,14 +143,22 @@ export default function SellerForm(props: Props) {
       {step === SellerStep.main ? (
         <>
           {noData && (
-            <Text
+            <View
               style={{
-                textAlign: 'center',
+                flex: 1,
+                height: 400,
+                justifyContent: 'center',
               }}
-              variant="headlineMedium"
             >
-              No Data
-            </Text>
+              <Text
+                style={{
+                  textAlign: 'center',
+                }}
+                variant="headlineMedium"
+              >
+                No Data
+              </Text>
+            </View>
           )}
           {!!collection.length && (
             <>
